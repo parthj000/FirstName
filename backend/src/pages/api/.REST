@@ -1,0 +1,53 @@
+
+###
+POST http://localhost:3000/api/login
+Content-Type: application/json
+
+{
+    "email":"nice",
+    "password":"qwER123!"
+}
+
+###
+POST http://localhost:3000/api/signup
+Content-Type: application/json
+
+{
+    "email":"jparth582@gmail.com",
+    "password":"nice",
+    "username":"nice"
+}
+
+
+###
+
+POST http://localhost:3000/api/confirm-password
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmIyMmVhYjI5OGRmMzQ1NThiNTU0MDAiLCJlbWFpbCI6ImpwYXJ0aDU4MkBnbWFpbC5jb20iLCJ1c2VybmFtZSI6Im5pY2UiLCJpYXQiOjE3MjI5NTM1ODcsImV4cCI6MTczODUwNTU4N30.Pu7g9r1-ZOloxi3GnFbXFpxFKrnHGb82GZZCaVLftm0
+
+{
+    
+    "password":"nice",
+    "username":"jparthkdsjskdjsdjk"
+}
+
+###
+GET http://localhost:3000/api/goals
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmIxZDhhYmNiZDliYTNjYWMyZmYyNDkiLCJlbWFpbCI6InBhcnNqb3NoaTJAZ21haWwuY29tIiwidXNlcm5hbWUiOiJuaXRpc2hzaXIiLCJpYXQiOjE3MjI5MzcxNTYsImV4cCI6MTczODQ4OTE1Nn0.weLj4FUo73HG4UZQVa7f8tu8jI6YpBDkaJl6oRoLxew
+
+###
+GET http://localhost:3000/api/confirm-password
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmIxZDhhYmNiZDliYTNjYWMyZmYyNDkiLCJlbWFpbCI6InBhcnNqb3NoaTJAZ21haWwuY29tIiwidXNlcm5hbWUiOiJuaXRpc2hzaXIiLCJpYXQiOjE3MjI5MzcxNTYsImV4cCI6MTczODQ4OTE1Nn0.weLj4FUo73HG4UZQVa7f8tu8jI6YpBDkaJl6oRoLxew
+
+
+
+
+
+
+
+
+
+
+

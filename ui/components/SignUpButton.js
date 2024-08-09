@@ -7,49 +7,34 @@ import {
 import React, { useState } from "react";
 import Toast from "react-native-toast-message";
 
-async function signUp(email, username, password, setLoading) {
-  setLoading(true);
-  console.log({
-    username: username,
-    password: password,
-    email: email,
-  });
-  await fetch(`${process.env.BACKEND_URI}/api/signup`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      username: username,
-      password: password,
-      email: email,
-    }),
-  })
-    .then((res) => {
-      if (res.status == 400 || res.status == 201) {
-        return res.json();
-      } else if (res.status === 409) {
-        throw new Error("Username or email already exist");
-      } else {
-        throw new Error("Oops, Something went wrong !");
-      }
-    })
-    .then((data) => {
-      Toast.show({
-        type: "success",
-        text1: data.message,
-      });
-      console.log(data);
-      setLoading(false);
-    })
-    .catch((error) => {
-      Toast.show({
-        type: "error",
-        text1: error.message,
-      });
-      setLoading(false);
-      console.log(data);
+async function signUp(email, username,setLoading) {
+  try {
+    setLoading(true);
+    const res = await fetch(`${process.env.BACKEND_URI}/api/signup`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: username,
+        email: email,
+      }),
     });
+
+    const data = await res.json();
+    setLoading(false);
+
+    Toast.show({
+      type: "success",
+      text1: data.message,
+    });
+  } catch (err) {
+    console.log(err);
+    Toast.show({
+      type: "error",
+      text1: err.message,
+    });
+  }
 }
 
 const SignUpButton = (props) => {
@@ -64,19 +49,17 @@ const SignUpButton = (props) => {
           style={styles.signUpButton}
           onPress={async () => {
             try {
-              if (!props.username || !props.password || !props.email) {
+              if (!props.username ||  !props.email) {
                 props.username ? null : props.setUsrerr("*required");
-                props.password ? null : props.setPwderr("*required");
                 props.email ? null : props.setEmailerr("*required");
                 return null;
-              } else if (props.emailerr || props.pwderr || props.usrerr) {
+              } else if (props.emailerr  || props.usrerr) {
                 return null;
               }
 
               await signUp(
                 props.email,
                 props.username,
-                props.password,
                 setLoading
               );
             } catch (err) {

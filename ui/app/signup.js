@@ -90,32 +90,7 @@ export default function SignUpPage() {
         </View>
 
         {/* Password TextInput */}
-        <View style={{ width: "100%" }}>
-          <View style={styles.passwordContainer}>
-            <TextInput
-              style={[styles.input, styles.fullInput]}
-              placeholder="Password"
-              secureTextEntry={!showPassword}
-              onChangeText={(val) => {
-                setPassword(val);
-                setPwderr(validatePassword(val));
-              }}
-            />
-            <TouchableWithoutFeedback onPress={toggleShowPassword}>
-              <Ionicons
-                name={showPassword ? "eye-outline" : "eye-off-outline"}
-                color="#6c757d"
-                style={styles.toggleIcon}
-              />
-            </TouchableWithoutFeedback>
-          </View>
-          {pwderr ? (
-            <View style={styles.errorContainer}>
-              <Text style={styles.error}>{pwderr}</Text>
-            </View>
-          ) : null}
-        </View>
-
+        
         {/* Sign Up Button */}
         <SignUpButton
           email={email}
