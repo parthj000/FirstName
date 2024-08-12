@@ -1,11 +1,10 @@
 {
   "expo": {
-    "name": "my-app",
-    "slug": "my-app",
-    "scheme": "my-app",
+    "name": "BrainFlow",
+    "slug": "BrainFlow",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/icon.jpeg",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -19,22 +18,10 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      },
-      "package": "com.parth3214445456865.app"
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "plugins": [
-      "expo-router"
-    ],
-    "extra": {
-      "router": {
-        "origin": false
-      },
-      "eas": {
-        "projectId": "0477d792-58f0-4fc3-b94e-5d4166f7e20e"
-      }
     }
   }
 }

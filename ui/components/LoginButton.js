@@ -7,10 +7,10 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import Toast from "react-native-toast-message";
-import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
 
-async function logIn2(email, password, setLoading) {
+async function logIn2(email, password, setLoading, navigation) {
   try {
     setLoading(true);
     const res = await fetch(`${process.env.BACKEND_URI}/api/login`, {
@@ -26,10 +26,12 @@ async function logIn2(email, password, setLoading) {
     const data = await res.json();
     console.log(data);
     if (res.ok) {
-      console.log(data.token +"login token here ---------------------------------");
+      console.log(
+        data.token + " login token here ---------------------------------"
+      );
       await AsyncStorage.setItem("token", data.token);
       setLoading(false);
-      router.push("/welcome");
+      navigation.replace("WelcomePage");
       return;
     } else {
       Toast.show({
@@ -41,7 +43,7 @@ async function logIn2(email, password, setLoading) {
     }
   } catch (error) {
     Toast.show({
-      type: "success",
+      type: "error",
       text1: error.message,
     });
     setLoading(false);
@@ -51,6 +53,7 @@ async function logIn2(email, password, setLoading) {
 
 const LoginButton = (props) => {
   const [loading, setLoading] = useState(false);
+  const navigation = useNavigation();
 
   return (
     <>
@@ -67,14 +70,14 @@ const LoginButton = (props) => {
                 return null;
               }
 
-              await logIn2(props.email, props.password, setLoading);
+              await logIn2(props.email, props.password, setLoading, navigation); // Pass navigation to logIn2
             } catch (err) {
               console.log(err);
             }
           }}
         >
           <Text style={styles.signUpButtonText}>Log In</Text>
-        </TouchableOpacity> 
+        </TouchableOpacity>
       )}
     </>
   );
@@ -90,7 +93,6 @@ const styles = StyleSheet.create({
     marginTop: 15,
     alignItems: "center",
     borderRadius: 10,
-    
   },
   signUpButtonText: {
     color: "black",

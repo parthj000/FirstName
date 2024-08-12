@@ -1,6 +1,5 @@
-import { Link, router, useRouter, useRouteParams } from "expo-router";
-import React, { useContext, useEffect, useState } from "react";
-import { Modal, Button } from "react-native-paper";
+// import { Link, router, useRouter, useRouteParams } from "expo-router";
+import React, { useEffect, useState } from "react";
 
 import {
   View,
@@ -11,12 +10,19 @@ import {
   Image,
   StatusBar,
   ActivityIndicator,
+  Platform,
+  Modal,
+  KeyboardAvoidingView,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Toast from "react-native-toast-message";
+import { useFonts } from "expo-font";
+import { useNavigation, CommonActions } from "@react-navigation/native";
+import WelcomeGrid from "../components/WelcomeGrid";
+import ConfirmPassword from "../components/ConfirmPassword";
 
 export default function WelcomePage() {
-  const route = useRouter();
+  // const route = useRouter();
   const [goal, setGoal] = useState(null);
   const [name, setName] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -25,12 +31,12 @@ export default function WelcomePage() {
   const [newGoal, setNewGoal] = useState("");
   const [success, setSuccess] = useState(false);
   const [goalLoading, setGoalLoading] = useState("");
-  // const [required, setRequired] = useState(false);
+  const [confirm, setConfirm] = useState(null);
+
+  const navigation = useNavigation();
 
   const fetchGoal = async () => {
     try {
-      setLoading(true);
-
       const token = await AsyncStorage.getItem("token");
 
       if (token) {
@@ -50,7 +56,6 @@ export default function WelcomePage() {
         if (res.ok) {
           data.goalText ? setGoal(data.goalText) : setGoal("set your goal");
           setName(data.username);
-          setLoading(false);
           return;
         }
         console.log(data + "data herer ---------------------------");
@@ -63,7 +68,6 @@ export default function WelcomePage() {
       if (error.message === "Network request failed") {
         console.log(error);
         setGoal("!Network error!");
-        setLoading(false);
         return;
       }
       console.log(error);
@@ -130,9 +134,93 @@ export default function WelcomePage() {
     }
   };
 
+  const handleLogout = async () => {
+    try {
+      console.log("pressed");
+      setLoading(true);
+      console.log(loading);
+
+      await AsyncStorage.multiRemove(["token", "confirm"]).then(() => {
+        setLoading(false);
+        navigation.replace("Login");
+      });
+
+      return;
+    } catch (err) {
+      setLoading(false);
+      Toast.show({
+        type: "error",
+        text1: err.message,
+      });
+    }
+  };
+
+  const getConfirmStatus = async () => {
+    console.log("loaded first");
+    try {
+      const confirmStore = await AsyncStorage.getItem("confirm");
+      if (!confirmStore) {
+        const token = await AsyncStorage.getItem("token");
+
+        const res = await fetch(
+          `${process.env.BACKEND_URI}/api/confirm-password`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        // if (!res.ok) {
+        //   throw new Error(`HTTP error! Status: ${res.status}`);
+        // }
+
+        const data = await res.json();
+
+        console.log(data.confirm, "this is just before setting data");
+        await AsyncStorage.setItem("confirm", data.confirm);
+        setConfirm(data.confirm);
+        console.log("[[[[[[[[[[[[[[[[[[[[[[[[=======================");
+        return;
+      }
+
+      setConfirm(confirmStore);
+
+      return;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const finale = async () => {
+    try {
+      await getConfirmStatus();
+      await fetchGoal();
+      setLoading(false);
+    } catch (err) {
+      console.log(err);
+      setLoading(false);
+      Toast.show({
+        type: "error",
+        text1: "Something really went wrong !",
+      });
+    }
+  };
+
   useEffect(() => {
-    fetchGoal(setLoading);
+    setLoading(true);
+    finale();
   }, []);
+
+  if (confirm && confirm !== "true") {
+    return (
+      <>
+        <ConfirmPassword navigation={navigation} />
+      </>
+    );
+  }
 
   return (
     <>
@@ -150,54 +238,39 @@ export default function WelcomePage() {
           <ActivityIndicator size="large" color="black" />
         </View>
       ) : (
-        <View style={{ backgroundColor: "#92A0AD" }}>
+        <View style={{ backgroundColor: "#92A0AD", flex: 1, paddingTop: 50 }}>
           <View style={{ position: "relative", zIndex: 78, width: "100%" }}>
             <Toast />
           </View>
 
           <View
-            style={{ justifyContent: "flex-end", marginRight: 25, marginTop: 30 }}
+            style={
+              Platform.OS === "ios"
+                ? {
+                    justifyContent: "flex-end",
+                    marginRight: 25,
+                    marginTop: 20,
+                  }
+                : {
+                    justifyContent: "flex-end",
+                    marginRight: 25,
+                  }
+            }
           >
             <TouchableOpacity
-              style={{
-                backgroundColor: "transparent",
-                width: 60,
-                alignSelf: "flex-end",
-                alignItems: "center",
-                justifyContent: "center",
-                borderRadius: 4,
-                padding: 5,
-                borderColor: "black",
-                borderWidth: 1,
-              }}
-              onPress={async () => {
-                try {
-                  console.log("pressed");
-                  setLoading(true);
-                  console.log(loading);
-                  await AsyncStorage.removeItem("token").then(() => {
-                    setLoading(false);
-                    router.push("/login");
-                  });
-
-                  return;
-                } catch (err) {
-                  setLoading(false);
-                  Toast.show({
-                    type: "error",
-                    text1: err.message,
-                  });
-                }
+              style={logoutStyles.button}
+              onPress={() => {
+                handleLogout();
               }}
             >
-              <Text>Logout</Text>
+              <Text style={logoutStyles.text}>Logout</Text>
             </TouchableOpacity>
           </View>
 
           <View style={styles.first}>
             <Text style={styles.Welcome}>
               Welcome{" "}
-              <Text style={{ color: "black", fontWeight: "300" }}>Back,</Text>
+              <Text style={{ color: "black", fontWeight: "300" }}>back,</Text>
             </Text>
             <Text style={styles.username}>{name} !</Text>
             <TouchableOpacity
@@ -215,159 +288,163 @@ export default function WelcomePage() {
                 {goal}
               </TextInput>
             </TouchableOpacity>
-          </View>
-          <Text
-            style={{
-              textAlign: "center",
-              fontWeight: "bold",
-              // marginLeft: 40,
-              // width: "83%",
-            }}
-          >
-            Goals for today
-          </Text>
 
-          <View style={styles.second}>
-            <TouchableOpacity
-              style={styles.Actvitiy}
-              onPress={() => route.push("/activities")}
+            <Text
+              style={{
+                
+                textAlign: "center",
+                paddingHorizontal: 30,
+              }}
             >
-              <Image
-                style={{ height: "80%", width: "100%" }}
-                source={require("../assets/clock.png")}
-              ></Image>
-              <Text>Activity</Text>
-            </TouchableOpacity>
+              Goals for today
+            </Text>
 
-            <TouchableOpacity
-              style={styles.Calender}
-              onPress={() => route.push("/calendar")}
-            >
-              <Image
-                style={{ height: "80%", width: "100%" }}
-                source={require("../assets/calendar.png")}
-              ></Image>
-              <Text>Calendar</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.Resources}
-              onPress={() => route.push("/resources")}
-            >
-              <Image
-                style={{ height: "80%", width: "100%" }}
-                source={require("../assets/books.png")}
-              ></Image>
-              <Text>Resources</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.Progress}
-              onPress={() => route.push("/progress")}
-            >
-              <Image
-                style={{ height: "80%", width: "100%" }}
-                source={require("../assets/bars.png")}
-              ></Image>
-              <Text>Progress</Text>
-            </TouchableOpacity>
+            <WelcomeGrid />
           </View>
         </View>
       )}
 
       <Modal
+        animationType="slide"
+        transparent={true}
         visible={modalVisible}
-        onDismiss={() => {
-          setSuccess(false);
-          setModalVisible(false);
-          return;
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
         }}
-        contentContainerStyle={styles.modalView}
       >
-        {goalLoading ? (
-          <ActivityIndicator size="large" color={"black"} />
-        ) : (
-          <>
-            <Text style={styles.modalText}>Set a Goal</Text>
-            <View style={{ marginBottom: 20, width: "100%" }}>
-              <TextInput
-                style={styles.input}
-                placeholder="Enter your goal"
-                value={newGoal}
-                onChangeText={setNewGoal}
-              />
-              {newGoal ? null : (
-                <Text
-                  style={{
-                    fontStyle: "italic",
-                    fontSize: 10,
-                    color: "red",
-                    paddingLeft: 10,
-                  }}
-                >
-                  *required
-                </Text>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={{ flex: 1 }}
+        >
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContent}>
+              {goalLoading ? (
+                <View style={styles.loaderContainer}>
+                  <ActivityIndicator size="large" color={"black"} />
+                </View>
+              ) : (
+                <>
+                  <Text style={styles.modalTitle}>Set a Goal</Text>
+                  <View style={styles.inputWrapper}>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Enter your goal"
+                      selectionColor={"grey"}
+                      value={newGoal}
+                      onChangeText={setNewGoal}
+                    />
+                    {newGoal ? null : (
+                      <Text style={styles.errorText}>*required</Text>
+                    )}
+                  </View>
+
+                  <View style={styles.buttonContainer}>
+                    <TouchableOpacity
+                      style={styles.button}
+                      onPress={() => {
+                        setModalVisible(false);
+                        setNewGoal("");
+                      }}
+                    >
+                      <Text style={styles.buttonText}>Cancel</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      style={styles.button}
+                      onPress={() => {
+                        handleSetGoal();
+                      }}
+                    >
+                      <Text style={styles.buttonText}>Save</Text>
+                    </TouchableOpacity>
+                  </View>
+                </>
               )}
             </View>
-
-            <TouchableOpacity
-              style={{
-                backgroundColor: "#C8D5E1",
-                borderRadius: 5,
-                color: "white",
-                padding: 7,
-              }}
-              onPress={() => {
-                handleSetGoal();
-              }}
-            >
-              <Text
-                onPress={() => {
-                  handleSetGoal();
-                }}
-                style={{ color: "black", fontWeight: "bold" }}
-              >
-                Save
-              </Text>
-            </TouchableOpacity>
-          </>
-        )}
+          </View>
+        </KeyboardAvoidingView>
       </Modal>
     </>
   );
 }
 
 const styles = StyleSheet.create({
-  bgimage: {
-    position: "absolute",
-    top: -210,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    width: 500,
-    height: 505,
-    zIndex: -1,
+  modalOverlay: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.8)",
+  },
+  modalContent: {
+    paddingVertical: 60,
+    paddingHorizontal: 20,
+    minWidth: "90%",
+
+    elevation: 5,
+    borderRadius: 15,
+    backgroundColor: "#E1E1E1",
+  },
+  loaderContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: 35,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 40,
+  },
+
+  input: {
+    backgroundColor: "white",
+    borderRadius: 10,
+    width: "100%",
+    padding: 15,
+    elevation: 5,
+  },
+  errorText: {
+    fontStyle: "italic",
+    fontSize: 10,
+    color: "red",
+    paddingLeft: 10,
+    marginTop: 5,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 20,
+  },
+  button: {
+    backgroundColor: "#C8D5E1",
+    borderRadius: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+  },
+  buttonText: {
+    color: "black",
+    fontWeight: "bold",
   },
   first: {
-    paddingLeft: 40,
+    paddingHorizontal: 40, // backgroundColor: "black",
   },
 
   Welcome: {
-    fontWeight: "300",
     marginTop: "5%",
     fontSize: 40,
     color: "black",
+    
   },
   username: {
     color: "black",
     fontSize: 27,
-    fontWeight: "800",
+    textTransform: "capitalize",
+    
   },
 
   usernameGoal: {
     marginTop: 35,
     marginBottom: 5,
-    width: "83%",
+    width: "100%",
     backgroundColor: "#E1E1E1",
     color: "black",
     fontWeight: "500",
@@ -376,6 +453,7 @@ const styles = StyleSheet.create({
     padding: 5,
     borderRadius: 25,
     elevation: 8,
+    
   },
 
   Goal: {
@@ -386,6 +464,7 @@ const styles = StyleSheet.create({
     height: 35,
     padding: 5,
     borderRadius: 25,
+    
   },
 
   second: {
@@ -394,7 +473,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     gap: 15,
-    paddingLeft: 40,
+
     paddingBottom: "100%",
   },
 
@@ -479,10 +558,25 @@ const styles = StyleSheet.create({
   input: {
     width: "100%",
     height: 40,
-    borderColor: "#CCCCCC",
-    borderWidth: 1,
+
+    backgroundColor: "white",
 
     paddingLeft: 10,
     borderRadius: 10,
+  },
+});
+
+const logoutStyles = StyleSheet.create({
+  button: {
+    backgroundColor: "#C8D5E1",
+    padding: 8,
+    borderRadius: 5,
+
+    alignSelf: "flex-end",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  text: {
+    
   },
 });
