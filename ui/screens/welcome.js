@@ -433,7 +433,7 @@ const styles = StyleSheet.create({
   errorText: {
     fontStyle: "italic",
     fontSize: 10,
-    color: "red",
+    // color: "red",
     paddingLeft: 10,
     marginTop: 5,
   },
@@ -475,7 +475,7 @@ const styles = StyleSheet.create({
     marginBottom:5 ,
     paddingVertical: 7,
     paddingHorizontal:10,
-    borderRadius:10,
+    borderRadius:15,
 
     width: "100%",
     backgroundColor: "#E1E1E1",

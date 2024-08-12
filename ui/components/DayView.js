@@ -80,7 +80,11 @@ const MyCalendarComponent = () => {
               // Alert.alert(e.title, e.des);
               setModalData(e);
               setModalVisible(true);
-              
+            }}
+            eventCellStyle={{
+              borderColor: "black",
+              borderWidth: 0.5,
+              backgroundColor: "grey",
             }}
             events={newEvents} // Add your events here
             height={height}

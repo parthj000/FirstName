@@ -9,6 +9,7 @@ import {
   StatusBar,
   TouchableWithoutFeedback,
   ActivityIndicator,
+  Platform,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -26,14 +27,19 @@ const ConfirmPassword = (props) => {
 
   const [pwderr, setPwderr] = useState(null);
 
-  const toggleShowPassword = () => {
+  const [showPassword2, setShowPassword2] = useState(false);
+  const [password2, setPassword2] = useState("");
+
+  const [pwderr2, setPwderr2] = useState(null);
+
+  const toggleShowPassword = (showPassword,setShowPassword) => {
     setShowPassword(!showPassword);
   };
 
   return (
     <>
       <StatusBar barStyle="dark-content" backgroundColor="#92A0AD" />
-      
+
       <View style={{ position: "relative", zIndex: 78, width: "100%" }}>
         <Toast />
       </View>
@@ -61,9 +67,8 @@ const ConfirmPassword = (props) => {
                 setPwderr(validatePassword(val));
               }}
             />
-            
 
-            <TouchableWithoutFeedback onPress={toggleShowPassword}>
+            <TouchableWithoutFeedback onPress={()=>toggleShowPassword(showPassword,setShowPassword)}>
               <Ionicons
                 name={showPassword ? "eye-outline" : "eye-off-outline"}
                 color="#6c757d"
@@ -78,17 +83,46 @@ const ConfirmPassword = (props) => {
           ) : null}
         </View>
 
+        {/* another password input */}
+
+        <View style={{ width: "100%" }}>
+          <View style={styles.passwordContainer}>
+            <TextInput
+              style={[styles.input, styles.fullInput]}
+              placeholder="Password"
+              secureTextEntry={!showPassword2}
+              onChangeText={(val) => {
+                setPassword2(val);
+                setPwderr2(validatePassword(val));
+              }}
+            />
+
+            <TouchableWithoutFeedback onPress={()=>toggleShowPassword(showPassword2,setShowPassword2)}>
+              <Ionicons
+                name={showPassword2 ? "eye-outline" : "eye-off-outline"}
+                color="#6c757d"
+                style={styles.toggleIcon}
+              />
+            </TouchableWithoutFeedback>
+          </View>
+          {pwderr2 ? (
+            <View style={styles.errorContainer}>
+              <Text style={styles.error}>{pwderr2}</Text>
+            </View>
+          ) : null}
+        </View>
+
         {/* Sign Up Button */}
 
         <TouchableOpacity
           style={button.signUpButton}
           onPress={() => {
             console.log(password);
-            if (loading || !password) {
+            if (loading || !password || !password2) {
               return null;
             }
-            setLoading(true);
-            handleOnPress(pwderr, password, setLoading,navigation);
+            
+            handleOnPress({pwderr, password,pwderr2,password2, setLoading, navigation});
           }}
         >
           {loading ? (
@@ -104,13 +138,27 @@ const ConfirmPassword = (props) => {
 
 export default ConfirmPassword;
 
-const handleOnPress = async (pwderr, password, setLoading,navigation) => {
+const handleOnPress = async (props) => {
+  
+  const { pwderr, password, setLoading, navigation, pwderr2, password2 } =
+    props;
+  
   try {
-    if (pwderr || !password) {
+    if (pwderr || !password || pwderr2 || !password2) {
+      console.log("sdhsujh")
       return null;
     }
+    else if(password!==password2){
+      console.log("huu")
+      return Toast.show({
+        type:"info",
+        text1:"Passwords didn't match."
+      })
+    }
+
+    setLoading(true);
     const token = await AsyncStorage.getItem("token");
-    console.log(password);
+    
 
     const res = await fetch(`${process.env.BACKEND_URI}/api/confirm-password`, {
       method: "POST",
@@ -170,7 +218,7 @@ const button = StyleSheet.create({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop:"20%",
+    paddingTop:Platform.OS==="ios"?"25%":"5%",
 
     gap: 10,
     paddingHorizontal: 15,

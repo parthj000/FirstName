@@ -15,6 +15,8 @@ import { Calendar } from "react-native-big-calendar";
 import dayjs from "dayjs";
 import { fetchMonthEvents } from "../components/MonthView";
 import { CalendarContext } from "../components/CalendarContext";
+import EventModal from "../components/EventModal";
+
 
 const { width, height } = Dimensions.get("window");
 
@@ -29,10 +31,11 @@ const CustomWeeklyComponent = () => {
     weekEvents,
     setWeekEvents,
   } = useContext(CalendarContext);
-  // const [currentDate, setCurrentDate] = useState(dayjs().toDate());
 
-  // const [previousweek, setPreviousweek] = useState({});
-  // const [nextweek, setNextweek] = useState({});
+
+   const [modalData, setModalData] = useState({});
+   const [modalVisible, setModalVisible] = useState(false);
+  
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -96,6 +99,16 @@ const CustomWeeklyComponent = () => {
     [currentDate, previousweek, nextweek]
   );
 
+  const getEventColor = (eventIndex) => {
+    return greyShades[eventIndex % greyShades.length];
+  };
+
+  const greyShades = [
+    
+    
+    "#0d0d0d", // dark grey
+  ];
+
   return (
     <>
       {loading ? (
@@ -125,8 +138,24 @@ const CustomWeeklyComponent = () => {
                   height={height}
                   width={width}
                   mode="week"
-                  swipeEnabled={true}
+                  onPressEvent={(e) => {
+                    console.log(e);
+                    setModalData(e);
+                    setModalVisible(true);
+                  }}
+                  // calendarCellStyle={{ borderColor: "black", borderWidth:0 }}
+                  eventCellStyle={{
+                    borderColor: "black",
+                    borderWidth: 0.5,
+                    backgroundColor: "grey",
+                  }}
+                  swipeEnabled={false}
                   date={currentDate}
+                />
+                <EventModal
+                  setModalVisible={setModalVisible}
+                  modalVisible={modalVisible}
+                  data={modalData}
                 />
               </View>
             </PanGestureHandler>

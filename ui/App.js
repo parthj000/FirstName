@@ -25,7 +25,11 @@ export default function App() {
     const loadFontsAndHideSplash = async () => {
       await fetchFonts();
       setFontLoaded(true);
-      await SplashScreen.hideAsync(); // Hides the splash screen
+      setTimeout(async() => {
+        console.log("1 second is over");
+        await SplashScreen.hideAsync();
+      }, 500);
+       // Hides the splash screen
     };
 
     loadFontsAndHideSplash();

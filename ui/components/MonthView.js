@@ -105,9 +105,14 @@ const MonthView = () => {
             <View style={styles.calendarWrapper}>
               <Calendar
                 headerContainerStyle={{ backgroundColor: "white" }}
-                dayHeaderHighlightColor="red"
                 calendarCellStyle={{ backgroundColor: "white" }}
-                eventCellStyle={{ backgroundColor: "#92A0AD" }}
+                
+               
+                eventCellStyle={{
+                  borderColor: "black",
+                  borderWidth: 0.5,
+                  backgroundColor: "grey",
+                }}
                 dayHeaderStyle={{ colo: "red" }}
                 events={newEvents}
                 onPressCell={handleCell}
@@ -117,7 +122,6 @@ const MonthView = () => {
                   console.log(event);
                   setModalData(event);
 
-                  
                   setModalVisible(true);
                 }}
                 width={width}
@@ -130,7 +134,6 @@ const MonthView = () => {
                 setModalVisible={setModalVisible}
                 modalVisible={modalVisible}
                 data={modalData}
-                
               />
             </View>
           </PanGestureHandler>

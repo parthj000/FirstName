@@ -66,7 +66,9 @@ const AddTask = () => {
           text1: "Event created succesfully",
         });
         setTimeout(() => {
-          navigation.goBack();
+          navigation.goBack({
+            view:"Month"
+        });
         }, 1000);
 
         return;
