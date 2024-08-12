@@ -11,11 +11,14 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { Link } from "expo-router";
 import SignUpButton from "../components/SignUpButton";
 import Toast from "react-native-toast-message";
+import { useNavigation } from "@react-navigation/native";
+
 
 export default function SignUpPage() {
+
+  const navigation = useNavigation();
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
@@ -90,7 +93,7 @@ export default function SignUpPage() {
         </View>
 
         {/* Password TextInput */}
-        
+
         {/* Sign Up Button */}
         <SignUpButton
           email={email}
@@ -105,99 +108,88 @@ export default function SignUpPage() {
         />
 
         {/* Option Text */}
-        <Text style={styles.optionText}>
-          Already have an account?{" "}
-          <Link href="/login" style={{ color: "black" }}>
-            Log In
-          </Link>
-        </Text>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            marginTop: 15,
+          }}
+        >
+          <Text style={styles.optionText}>Already have an account? </Text>
+          <TouchableOpacity
+            style={{ alignItems: "bottom" }}
+            onPress={() => navigation.replace("Login")}
+          >
+            <Text
+              style={{
+                fontWeight: "bold",
+              }}
+            >
+              Login
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    gap: 10,
     paddingHorizontal: 30,
-    backgroundColor:"#92A0AD"
+    backgroundColor: "#92A0AD",
+    gap: 12,
   },
-  input: {
+  inputEmail: {
     height: 40,
-    borderColor: "black",
-    borderWidth: 1,
-    fontWeight:"bold",
-    // marginBottom: 12,
+    // borderColor: "black",
+    // borderWidth: 1,
+
+    // fontWeight: "bold",
+    elevation: 5,
+    backgroundColor: "white",
     padding: 12,
     borderRadius: 9,
-  },
-  fullInput: {
     width: "100%",
   },
-  halfInput: {
-    width: "48%",
-  },
-  row: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-
-    // marginBottom: 12,
+  signInButton: {
+    color: "white",
     width: "100%",
-  },
-  signUpButton: {
-    width: "100%",
-    backgroundColor: "#E1E1E1",
+    backgroundColor: "#007BFF",
     padding: 12,
     marginTop: 15,
     alignItems: "center",
+    textAlign: "center",
     borderRadius: 10,
   },
-  signUpButtonText: {
-    color: "black",
+  signInButtonText: {
+    color: "white",
     fontWeight: "bold",
   },
   optionText: {
-    marginTop: 10,
     fontSize: 14,
     color: "rgb(80 84 89)",
   },
   image: {
     width: "119%",
     height: 300,
+    marginBottom: 20,
     aspectRatio: "1/1",
-  },
-  passwordContainer: {
-    position: "relative",
-    width: "100%",
-  },
-  toggleIcon: {
-    position: "absolute",
-    right: 12,
-    top: 12,
-  },
-  inputEmail: {
-    fontWeight:"bold",
-    width: "100%",
-    height: 40,
-    borderColor: "black",
-    borderWidth: 1,
-    // marginBottom: 1,
-    padding: 12,
-    borderRadius: 9,
   },
   errorContainer: {
     width: "100%",
-    paddingHorizontal: 10,
-
+    // paddingHorizontal: 10,
     margin: 0,
   },
   error: {
     color: "black",
     fontSize: 12,
     fontStyle: "italic",
+    paddingHorizontal: 10,
   },
 });
 

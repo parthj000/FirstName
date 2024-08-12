@@ -29,7 +29,7 @@ const Activities = () => {
           <Toast />
         </View>
         <View style={styles.container}>
-          <Header />
+          {/* <Header /> */}
 
           <View style={styles.content}>
             <Text style={styles.Header}>Activity Log</Text>

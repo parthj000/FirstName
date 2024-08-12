@@ -20,7 +20,7 @@ const MyCalendar = () => {
           <Toast />
         </View>
         <View style={styles.container}>
-          <Header1 title="Calendar" />
+          {/* <Header1 title="Calendar" /> */}
           <Header />
           <DayView />
           <WeekView />

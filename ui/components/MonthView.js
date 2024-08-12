@@ -105,6 +105,7 @@ const MonthView = () => {
               <Calendar
                 headerContainerStyle={{ backgroundColor: "white" }}
                 dayHeaderHighlightColor="red"
+                calendarCellStyle={{ backgroundColor: "white" }}
                 eventCellStyle={{ backgroundColor: "#92A0AD" }}
                 dayHeaderStyle={{ colo: "red" }}
                 events={newEvents}

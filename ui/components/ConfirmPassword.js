@@ -11,14 +11,16 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { Link, router } from "expo-router";
 
 import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ConfirmPassword = (props) => {
-  
-  const [loading,setLoading]= useState(false)
+
+    const {navigation} = props;
+
+
+  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
 
@@ -27,8 +29,6 @@ const ConfirmPassword = (props) => {
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
-
-  
 
   return (
     <>
@@ -48,7 +48,7 @@ const ConfirmPassword = (props) => {
             marginVertical: 20,
           }}
         >
-          Confirm your password
+          Change Your Password
         </Text>
 
         {/* Password TextInput */}
@@ -89,13 +89,13 @@ const ConfirmPassword = (props) => {
               return null;
             }
             setLoading(true);
-            handleOnPress(pwderr, password, setLoading);
+            handleOnPress(pwderr, password, setLoading,navigation);
           }}
         >
           {loading ? (
             <ActivityIndicator color={"black"} />
           ) : (
-            <Text style={button.signUpButtonText}>Button</Text>
+            <Text style={button.signUpButtonText}>Save</Text>
           )}
         </TouchableOpacity>
       </View>
@@ -105,8 +105,7 @@ const ConfirmPassword = (props) => {
 
 export default ConfirmPassword;
 
-const handleOnPress = async (pwderr, password,setLoading) => {
-  
+const handleOnPress = async (pwderr, password, setLoading,navigation) => {
   try {
     if (pwderr || !password) {
       return null;
@@ -128,13 +127,13 @@ const handleOnPress = async (pwderr, password,setLoading) => {
     const data = await res.json();
     if (res.ok) {
       await AsyncStorage.setItem("confirm", "true");
-      
-      router.push("welcome");
+
+      navigation.replace("WelcomePage");
       Toast.show({
         type: "success",
         text1: "password has been set successfully !",
       });
-      setLoading(false)
+      setLoading(false);
       return;
     }
 
@@ -142,7 +141,7 @@ const handleOnPress = async (pwderr, password,setLoading) => {
       type: "error",
       text1: data.message,
     });
-    setLoading(false)
+    setLoading(false);
     return;
   } catch (err) {
     Toast.show({
@@ -181,7 +180,7 @@ const styles = StyleSheet.create({
     height: 40,
     // borderColor: "black",
     // borderWidth: 1,
-    elevation:4,
+    elevation: 4,
 
     backgroundColor: "white",
     // marginBottom: 12,
@@ -292,6 +291,3 @@ function validatePassword(input_string) {
 
   return null;
 }
-
-
-

@@ -120,7 +120,6 @@ const CustomWeeklyComponent = () => {
                 <Calendar
                   events={weekEvents}
                   weekDayHeaderHighlightColor="#92A0AD"
-                  
                   dayHeaderStyle={{ backgroundColor: "white" }}
                   dayHeaderHighlightColor="#92A0AD"
                   height={height}

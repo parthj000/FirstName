@@ -1,4 +1,3 @@
-
 import React from "react";
 import {
   View,
@@ -10,10 +9,9 @@ import {
   SafeAreaView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import WeekView from "../app/week";
 import Icon from "react-native-vector-icons/Ionicons";
 import WelcomePage from "./welcome";
-import { router } from "expo-router";
+// import { router } from "expo-router";
 
 const Header = ({ title }) => {
   const navigation = useNavigation();
