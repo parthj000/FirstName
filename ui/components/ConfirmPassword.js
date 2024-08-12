@@ -33,9 +33,7 @@ const ConfirmPassword = (props) => {
   return (
     <>
       <StatusBar barStyle="dark-content" backgroundColor="#92A0AD" />
-      <View style={{ position: "relative", zIndex: 78, width: "100%" }}>
-        <Toast />
-      </View>
+      
       <View style={{ position: "relative", zIndex: 78, width: "100%" }}>
         <Toast />
       </View>
@@ -63,6 +61,7 @@ const ConfirmPassword = (props) => {
                 setPwderr(validatePassword(val));
               }}
             />
+            
 
             <TouchableWithoutFeedback onPress={toggleShowPassword}>
               <Ionicons
@@ -171,6 +170,7 @@ const button = StyleSheet.create({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingTop:"20%",
 
     gap: 10,
     paddingHorizontal: 15,

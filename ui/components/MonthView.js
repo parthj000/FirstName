@@ -35,6 +35,7 @@ const MonthView = () => {
   const [previous, setPrevious] = useState({});
   const [next, setNext] = useState({});
   const [loading, setLoading] = useState(false);
+  const[modalData,setModalData] = useState({});
 
   useEffect(() => {
     setMonth(dayjs());
@@ -114,8 +115,10 @@ const MonthView = () => {
                 showAdjacentMonths={false}
                 onPressEvent={(event) => {
                   console.log(event);
-                  Alert.alert(event.title, event.des);
-                  // setModalVisible(true);
+                  setModalData(event);
+
+                  
+                  setModalVisible(true);
                 }}
                 width={width}
                 mode="month"
@@ -126,7 +129,8 @@ const MonthView = () => {
               <EventModal
                 setModalVisible={setModalVisible}
                 modalVisible={modalVisible}
-                data={""}
+                data={modalData}
+                
               />
             </View>
           </PanGestureHandler>

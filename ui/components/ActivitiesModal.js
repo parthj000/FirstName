@@ -284,7 +284,7 @@ const SelectDate = (props) => {
             padding: 7,
           }}
         >
-          <Text style={showStartDatePicker ? { color: "red" } : null}>
+          <Text style={showStartDatePicker&&Platform.OS ==="ios" ? { color: "red" } : null}>
             {date.toDateString()}
           </Text>
         </TouchableOpacity>
@@ -435,7 +435,7 @@ const TextComp = (props) => {
 
         {showTextInput && <TextInput style={{}} placeholder="Add title" />}
       </View>
-      <Divder height={0.75} color={"grey"} />
+      <Divder height={0.5} color={"grey"} />
     </>
   );
 };

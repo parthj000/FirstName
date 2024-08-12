@@ -21,6 +21,8 @@ import { useFonts } from "expo-font";
 import { useNavigation, CommonActions } from "@react-navigation/native";
 import WelcomeGrid from "../components/WelcomeGrid";
 import ConfirmPassword from "../components/ConfirmPassword";
+import { Ionicons } from "@expo/vector-icons";
+
 
 export default function WelcomePage() {
   // const route = useRouter();
@@ -214,6 +216,7 @@ export default function WelcomePage() {
     setLoading(true);
     finale();
   }, []);
+  
 
   if (confirm && confirm !== "true") {
     return (
@@ -276,28 +279,48 @@ export default function WelcomePage() {
               Welcome{" "}
               <Text style={{ color: "black", fontWeight: "300" }}>back,</Text>
             </Text>
-            <Text style={styles.username}>{name} !</Text>
+            <Text style={styles.username}>{name}</Text>
             <TouchableOpacity
               onPress={() => {
                 setModalVisible(true);
               }}
+              style={styles.usernameGoal}
             >
-              <TextInput
-                onPress={() => {
-                  setModalVisible(true);
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  width: "100%",
                 }}
-                style={styles.usernameGoal}
-                editable={false}
               >
-                {goal}
-              </TextInput>
+                {/* Empty View to balance the icon on the right */}
+                <View style={{ width: 18 }} />
+                
+                <Text
+                  style={{
+                    fontFamily: "glacial-r",
+                    fontSize: 16,
+                    textAlign: "center",
+                    flex: 1, // Takes up the remaining space
+                  }}
+                >
+                  {goal}
+                </Text>
+                <Ionicons
+                  name="create-outline"
+                  style={{ fontSize: 18 }}
+                  color="#000"
+                />
+              </View>
             </TouchableOpacity>
 
             <Text
               style={{
-                
                 textAlign: "center",
                 paddingHorizontal: 30,
+                fontFamily: "glacial-b",
+                fontSize: 16,
               }}
             >
               Goals for today
@@ -347,7 +370,7 @@ export default function WelcomePage() {
                       style={styles.button}
                       onPress={() => {
                         setModalVisible(false);
-                        setNewGoal("");
+                        // setNewGoal("");
                       }}
                     >
                       <Text style={styles.buttonText}>Cancel</Text>
@@ -394,6 +417,7 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     fontSize: 35,
+
     fontWeight: "bold",
     textAlign: "center",
     marginBottom: 40,
@@ -434,30 +458,33 @@ const styles = StyleSheet.create({
 
   Welcome: {
     marginTop: "5%",
-    fontSize: 40,
+    fontSize: 36,
+    letterSpacing: Platform.OS === "ios" ? 2.5 : 1.5,
+    fontFamily: "glacial-b",
     color: "black",
-    
   },
   username: {
     color: "black",
-    fontSize: 27,
+    fontSize: Platform.OS === "ios" ? 40 : 35,
+    fontFamily: "chunk-b",
     textTransform: "capitalize",
-    
   },
 
   usernameGoal: {
-    marginTop: 35,
-    marginBottom: 5,
+    marginTop: 40,
+    marginBottom:5 ,
+    paddingVertical: 7,
+    paddingHorizontal:10,
+    borderRadius:10,
+
     width: "100%",
     backgroundColor: "#E1E1E1",
     color: "black",
-    fontWeight: "500",
-    textAlign: "center",
-    height: 35,
-    padding: 5,
-    borderRadius: 25,
-    elevation: 8,
-    
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    elevation: 2,
   },
 
   Goal: {
@@ -468,81 +495,6 @@ const styles = StyleSheet.create({
     height: 35,
     padding: 5,
     borderRadius: 25,
-    
-  },
-
-  second: {
-    paddingTop: 60,
-    alignItems: "center",
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 15,
-
-    paddingBottom: "100%",
-    
-  },
-
-  Actvitiy: {
-    overflow: "hidden",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 3,
-    elevation: 5,
-    backgroundColor: "#E1E1E1",
-    width: "40%",
-    height: 150,
-    borderRadius: 15,
-    alignItems: "center",
-    justifyContent: "center",
-    
-  },
-
-  Calender: {
-    overflow: "hidden",
-
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 3,
-
-    elevation: 5,
-    backgroundColor: "#E1E1E1",
-    width: "40%",
-    height: 150,
-    borderRadius: 15,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
-  Resources: {
-    overflow: "hidden",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 3,
-    elevation: 5,
-    backgroundColor: "#E1E1E1",
-    width: "40%",
-    height: 150,
-    borderRadius: 15,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
-  Progress: {
-    overflow: "hidden",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 3,
-    elevation: 5,
-    backgroundColor: "#E1E1E1",
-    width: "40%",
-    height: 150,
-    borderRadius: 15,
-    alignItems: "center",
-    justifyContent: "center",
   },
 
   modalView: {
@@ -569,11 +521,10 @@ const styles = StyleSheet.create({
 
     paddingLeft: 10,
     borderRadius: 10,
-
   },
-  containText:{
-    fontFamily:"glass"
-  }
+  containText: {
+    fontFamily: "glass",
+  },
 });
 
 const logoutStyles = StyleSheet.create({

@@ -90,7 +90,9 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     alignItems: "center",
-    paddingTop: "20%",
+    // justifyContent:"center",
+    paddingTop: "30%",
+    
   },
   activityList: {
     backgroundColor: "#C8D5E1",
@@ -98,17 +100,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 70,
     alignItems: "center",
     justifyContent: "center",
-    marginVertical: 10,
+    marginVertical: 5,
     borderRadius: 40,
     elevation: 5,
   },
   title: {
-    fontSize: 18,
-    fontWeight: "bold",
+    fontSize: 20,
+    
+    fontFamily:"glacial-b"
   },
   Header: {
     fontSize: 40,
-    fontWeight: "bold",
+    fontFamily:"glacial-b",
     paddingBottom: 20,
   },
 });

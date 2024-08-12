@@ -377,6 +377,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "grey",
     paddingHorizontal: 2,
     // paddingVertical: 5,
+    // fontFamily:"glacial-r",
     fontSize: 15,
   },
   second: {

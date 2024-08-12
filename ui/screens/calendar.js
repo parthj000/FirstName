@@ -19,14 +19,15 @@ const MyCalendar = () => {
         <View style={{ position: "relative", zIndex: 5 }}>
           <Toast />
         </View>
+
         <View style={styles.container}>
           {/* <Header1 title="Calendar" /> */}
+          
           <Header />
           <DayView />
           <WeekView />
           <MonthView />
           {/* <AddEvent /> */}
-
           <FloatButton />
         </View>
       </CalendarProvider>

@@ -6,15 +6,20 @@ import { CalendarContext } from "./CalendarContext";
 import dayjs from "dayjs";
 import { doEventsStructuring, fetchMonthEvents } from "./MonthView";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import EventModal from "./EventModal";
+
 
 const { width, height } = Dimensions.get("window");
 
 const MyCalendarComponent = () => {
-  const { view, setView, month, setMonth } = useContext(CalendarContext);
-  const [currentDate, setCurrentDate] = useState(dayjs().toDate());
+  const { view, month  } = useContext(CalendarContext);
+  
   const [newEvents, setEvents] = useState([]);
-  const [previous, setPrevious] = useState({});
-  const [next, setNext] = useState({});
+  const [modalData, setModalData] = useState({});
+  const [modalVisible, setModalVisible] = useState(false);
+
+ 
+  
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     setLoading(true);
@@ -71,13 +76,24 @@ const MyCalendarComponent = () => {
             dayHeaderStyle={{ backgroundColor: "white" }}
             weekDayHeaderHighlightColor="black"
             dayHeaderHighlightColor="black"
-            onPressEvent={(e)=>{Alert.alert(e.title,e.des)}}
+            onPressEvent={(e) => {
+              // Alert.alert(e.title, e.des);
+              setModalData(e);
+              setModalVisible(true);
+              
+            }}
             events={newEvents} // Add your events here
             height={height}
             width={width}
             mode="day"
             date={month}
             swipeEnabled={false}
+          />
+
+          <EventModal
+            setModalVisible={setModalVisible}
+            modalVisible={modalVisible}
+            data={modalData}
           />
         </View>
       )}

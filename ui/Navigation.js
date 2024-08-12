@@ -27,10 +27,13 @@ const StackNavigator = () => {
             elevation: 0,
             shadowOpacity: 0,
             backgroundColor: "#92A0AD",
+            
+
           },
           headerTitleStyle: {
             alignSelf: "center",
             fontSize: 20,
+            fontFamily:"glacial-b"
           },
           headerTitleAlign:"center",
           ...TransitionPresets.SlideFromRightIOS,
@@ -49,9 +52,9 @@ const StackNavigator = () => {
           }}
         />
         <Stack.Screen
-          name="MyCalendar"
+          name="Calendar"
           component={MyCalendar}
-          options={{ headerBackTitle: "Home" }}
+          options={{ headerBackTitle: "Home",  }}
         />
         <Stack.Screen
           name="Activities"

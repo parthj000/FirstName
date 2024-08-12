@@ -6,8 +6,10 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import Toast from "react-native-toast-message";
+import { useNavigation } from "@react-navigation/native";
 
-async function signUp(email, username, setLoading) {
+
+async function signUp(email, username, setLoading,navigation) {
   try {
     setLoading(true);
     const res = await fetch(`${process.env.BACKEND_URI}/api/signup`, {
@@ -23,6 +25,7 @@ async function signUp(email, username, setLoading) {
 
     const data = await res.json();
     setLoading(false);
+    navigation.replace("Login");
 
     Toast.show({
       type: "success",
@@ -39,6 +42,7 @@ async function signUp(email, username, setLoading) {
 
 const SignUpButton = (props) => {
   const [loading, setLoading] = useState(false);
+  const navigation = useNavigation();
 
   return (
     <>
@@ -57,7 +61,7 @@ const SignUpButton = (props) => {
                 return null;
               }
 
-              await signUp(props.email, props.username, setLoading);
+              await signUp(props.email, props.username, setLoading,navigation);
             } catch (err) {
               console.log(err);
             }

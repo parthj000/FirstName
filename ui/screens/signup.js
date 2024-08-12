@@ -9,6 +9,7 @@ import {
   Image,
   StatusBar,
   TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import SignUpButton from "../components/SignUpButton";
@@ -38,98 +39,101 @@ export default function SignUpPage() {
   return (
     <>
       <StatusBar barStyle="dark-content" backgroundColor="#92A0AD" />
+
       <View style={{ position: "relative", zIndex: 78, width: "100%" }}>
         <Toast />
       </View>
-      <View style={styles.container}>
-        {/* <Image source={require("../assets/up.jpg")} style={styles.image} /> */}
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <View style={styles.container}>
+          {/* <Image source={require("../assets/up.jpg")} style={styles.image} /> */}
 
-        <Text
-          style={{
-            fontSize: 35,
-            fontWeight: "bold",
+          <Text
+            style={{
+              fontSize: 35,
+              fontWeight: "bold",
 
-            marginBottom: 16,
-          }}
-        >
-          SignUp
-        </Text>
-
-        {/* username TextInput */}
-
-        <View style={{ width: "100%" }}>
-          <TextInput
-            maxLength={20}
-            style={styles.inputEmail}
-            placeholder="Username "
-            onChangeText={(val) => {
-              setUsername(val);
-              setUsrerr(validateUsername(val));
+              marginBottom: 16,
             }}
-          />
-          {usrerr ? (
-            <View style={styles.errorContainer}>
-              <Text style={styles.error}>{usrerr}</Text>
-            </View>
-          ) : null}
-        </View>
-
-        {/* email TextInput */}
-        <View style={{ width: "100%" }}>
-          <TextInput
-            style={styles.inputEmail}
-            keyboardType="email-address"
-            placeholder="Enter your email"
-            onChangeText={(val) => {
-              setEmail(val);
-              setEmailerr(validateEmail(val));
-            }}
-          />
-          {emailerr ? (
-            <View style={styles.errorContainer}>
-              <Text style={styles.error}>{emailerr}</Text>
-            </View>
-          ) : null}
-        </View>
-
-        {/* Password TextInput */}
-
-        {/* Sign Up Button */}
-        <SignUpButton
-          email={email}
-          password={password}
-          username={username}
-          emailerr={emailerr}
-          setEmailerr={setEmailerr}
-          pwderr={pwderr}
-          setPwderr={setPwderr}
-          usrerr={usrerr}
-          setUsrerr={setUsrerr}
-        />
-
-        {/* Option Text */}
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            marginTop: 15,
-          }}
-        >
-          <Text style={styles.optionText}>Already have an account? </Text>
-          <TouchableOpacity
-            style={{ alignItems: "bottom" }}
-            onPress={() => navigation.replace("Login")}
           >
-            <Text
-              style={{
-                fontWeight: "bold",
+            SignUp
+          </Text>
+
+          {/* username TextInput */}
+
+          <View style={{ width: "100%" }}>
+            <TextInput
+              maxLength={20}
+              style={styles.inputEmail}
+              placeholder="Username "
+              onChangeText={(val) => {
+                setUsername(val);
+                setUsrerr(validateUsername(val));
               }}
+            />
+            {usrerr ? (
+              <View style={styles.errorContainer}>
+                <Text style={styles.error}>{usrerr}</Text>
+              </View>
+            ) : null}
+          </View>
+
+          {/* email TextInput */}
+          <View style={{ width: "100%" }}>
+            <TextInput
+              style={styles.inputEmail}
+              keyboardType="email-address"
+              placeholder="Enter your email"
+              onChangeText={(val) => {
+                setEmail(val);
+                setEmailerr(validateEmail(val));
+              }}
+            />
+            {emailerr ? (
+              <View style={styles.errorContainer}>
+                <Text style={styles.error}>{emailerr}</Text>
+              </View>
+            ) : null}
+          </View>
+
+          {/* Password TextInput */}
+
+          {/* Sign Up Button */}
+          <SignUpButton
+            email={email}
+            password={password}
+            username={username}
+            emailerr={emailerr}
+            setEmailerr={setEmailerr}
+            pwderr={pwderr}
+            setPwderr={setPwderr}
+            usrerr={usrerr}
+            setUsrerr={setUsrerr}
+          />
+
+          {/* Option Text */}
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              marginTop: 15,
+            }}
+          >
+            <Text style={styles.optionText}>Already have an account? </Text>
+            <TouchableOpacity
+              style={{ alignItems: "bottom" }}
+              onPress={() => navigation.replace("Login")}
             >
-              Login
-            </Text>
-          </TouchableOpacity>
+              <Text
+                style={{
+                  fontWeight: "bold",
+                }}
+              >
+                Login
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      </TouchableWithoutFeedback>
     </>
   );
 }

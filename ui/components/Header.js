@@ -83,7 +83,8 @@ const styles = StyleSheet.create({
   },
   dateText: {
     fontSize: 22,
-    fontWeight:'300'
+    fontFamily:"glacial-r"
+    // fontWeight:'300'
   },
   dropdown: {
     width: "30%",

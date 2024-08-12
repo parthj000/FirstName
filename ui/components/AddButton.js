@@ -4,7 +4,6 @@ import { FloatingAction } from "react-native-floating-action";
 import { useNavigation } from "@react-navigation/native";
 
 const FloatButton = () => {
-  const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
   const actions = [
     {
@@ -30,12 +29,10 @@ const FloatButton = () => {
   const handlePress = (name) => {
     if (name === "add_event") {
       navigation.push("AddEvent");
-      // router.push("add");
+   
     } else if (name === "add_task") {
       navigation.push("AddTask");
-      // Handle add task action
-      // Alert.alert('Add Task', 'Task button pressed');
-      // router.push("addtask");
+     
     }
   };
 

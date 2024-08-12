@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
-import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, Image, StyleSheet, TouchableOpacity, Platform } from "react-native";
 
 const WelcomeGrid = () => {
   const navigation = useNavigation();
@@ -31,7 +31,7 @@ const WelcomeGrid = () => {
           <View style={styles.itemWrapper}>
             <TouchableOpacity
               style={styles.itemContainer}
-              onPress={() => handlePress("MyCalendar")}
+              onPress={() => handlePress("Calendar")}
             >
               <View style={styles.item}>
                 <Image
@@ -100,6 +100,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#E1E1E1",
     borderRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    elevation: 2,
   },
   item: {
     width: 250,
@@ -114,7 +119,8 @@ const styles = StyleSheet.create({
   itemText: {
     textAlign: "center",
     marginTop: 4,
-    fontWeight: "bold",
+    fontSize: Platform.OS === "ios" ? 16 : 14,
+    fontFamily: "glacial-b",
   },
 });
 
