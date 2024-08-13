@@ -6,7 +6,7 @@ import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 const moment = require('moment');
-
+import { ObjectId } from "mongodb"; 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
 dayjs.extend(advancedFormat);
@@ -19,14 +19,14 @@ const NO_REPEAT = 'N';
 export default async function handler(req, res) {
   const { method } = req;
 
-  if (method !== "POST" && method !== "GET") {
+  if (!["POST", "GET", "PATCH", "DELETE"].includes(method)) {
     return res.status(405).json({ message: "Method not allowed" });
   }
 
   const token = req.headers["x-auth-token"];
- if (!token) {
-    return res.status(401).json({ message: "Missing or invalid token" });
-  }
+  // if (!token) {
+  //   return res.status(401).json({ message: "Missing or invalid token" });
+  // }
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -41,8 +41,8 @@ export default async function handler(req, res) {
         return res.status(400).json({ message: "All fields are required" });
       }
 
-      const startDateTimestamp = Math.floor(new Date(startDate).getTime()/1000);
-      const endDateTimestamp = Math.floor(new Date(endDate).getTime()/1000);
+      const startDateTimestamp = Math.floor(new Date(startDate).getTime() / 1000);
+      const endDateTimestamp = Math.floor(new Date(endDate).getTime() / 1000);
 
       if (isNaN(startDateTimestamp)) {
         return res.status(400).json({ message: "Invalid startDate format" });
@@ -68,7 +68,6 @@ export default async function handler(req, res) {
     }
 
     if (method === "GET") {
-      // console.log('Insider Events Get');
       const { mode, startDate, endDate } = req.query;
       let startTimestamp, endTimestamp, prevStart, prevEnd, nextStart, nextEnd;
       let startDayjs, endDayjs;
@@ -137,11 +136,69 @@ export default async function handler(req, res) {
         next: { startDate: nextStart, endDate: nextEnd },
       });
     }
+
+    if (method === "PATCH") {
+      const { id } = req.query;
+      const { title, startDate, endDate, category, description, recurrence } = req.body;
+
+      if (!id || !title || !startDate || !category   === undefined) {
+        return res.status(400).json({ message: "All fields are required" });
+      }
+
+      const startDateTimestamp = Math.floor(new Date(startDate).getTime()/1000 );
+      const endDateTimestamp = Math.floor(new Date(endDate).getTime()/1000 );
+      console.log(startDateTimestamp, endDateTimestamp)
+      if (isNaN(startDateTimestamp)) {
+        return res.status(400).json({ message: "Invalid startDate format" });
+      }
+
+      if (endDateTimestamp <= startDateTimestamp) {
+        return res.status(400).json({ message: "End time must be greater than start time" });
+      }
+
+      const updatedEvent = {
+        title,
+        startDate: startDateTimestamp,
+        endDate: endDateTimestamp,
+        category,
+        description,
+        recurrence,
+        updatedAt: Math.floor(Date.now() / 1000), // Initially set updatedAt to the same value as createdAt
+      };
+
+      const result = await eventsCollection.updateOne(
+        { _id: new ObjectId(id) },
+        { $set: updatedEvent }
+      );
+
+      if (result.matchedCount === 0) {
+        return res.status(404).json({ message: "Event not found" });
+      }
+
+      return res.status(200).json({ message: "Event updated successfully" });
+    }
+
+    if (method === "DELETE") {
+      const { id } = req.query;
+
+      if (!id) {
+        return res.status(400).json({ message: "Event ID is required" });
+      }
+
+      const result = await eventsCollection.deleteOne({ _id: new ObjectId(id), userId: decoded.userId });
+
+      if (result.deletedCount === 0) {
+        return res.status(404).json({ message: "Event not found" });
+      }
+
+      return res.status(200).json({ message: "Event deleted successfully" });
+    }
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal server error" });
   }
 }
+
 
 function generateOccurrences(event, startDate, endDate) {
   console.log(event, startDate, endDate);
