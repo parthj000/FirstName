@@ -145,14 +145,14 @@ const handleOnPress = async (props) => {
   
   try {
     if (pwderr || !password || pwderr2 || !password2) {
-      console.log("sdhsujh")
+      
       return null;
     }
     else if(password!==password2){
       console.log("huu")
       return Toast.show({
-        type:"info",
-        text1:"Passwords didn't match."
+        type:"error",
+        text1:"Passwords didn't match!"
       })
     }
 
@@ -178,7 +178,7 @@ const handleOnPress = async (props) => {
       navigation.replace("WelcomePage");
       Toast.show({
         type: "success",
-        text1: "password has been set successfully !",
+        text1: "Password has been set successfully!",
       });
       setLoading(false);
       return;

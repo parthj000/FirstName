@@ -63,7 +63,7 @@ const AddEvent = () => {
       if (request.status === 201) {
         Toast.show({
           type: "success",
-          text1: "Event created succesfully",
+          text1: "Event created succesfully!",
         });
         setTimeout(() => {
           navigation.navigate({
@@ -77,7 +77,7 @@ const AddEvent = () => {
       }
 
       Toast.show({
-        type: "success",
+        type: "error",
         text1: res.message,
       });
       setLoading(false);
@@ -85,7 +85,7 @@ const AddEvent = () => {
     } catch (error) {
       Toast.show({
         type: "error",
-        text1: "Event not created",
+        text1: "Event not created!",
       });
       setLoading(false);
     }

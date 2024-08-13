@@ -482,7 +482,7 @@ async function postactivites(dataSend, setLoading, id, setModalVisible) {
     if (res.ok) {
       Toast.show({
         type: "success",
-        text1: "Activity set successfully",
+        text1: "Activity set successfully!",
       });
 
       setTimeout(() => {
@@ -502,7 +502,7 @@ async function postactivites(dataSend, setLoading, id, setModalVisible) {
     }
   } catch (error) {
     Toast.show({
-      type: "success",
+      type: "error",
       text1: error.message,
     });
     setLoading(false);

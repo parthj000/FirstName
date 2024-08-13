@@ -25,6 +25,8 @@ import { Ionicons } from "@expo/vector-icons";
 
 
 export default function WelcomePage() {
+
+  
   // const route = useRouter();
   const [goal, setGoal] = useState(null);
   const [name, setName] = useState(null);
@@ -78,7 +80,7 @@ export default function WelcomePage() {
       router.push("/login");
       Toast.show({
         type: "error",
-        text1: "Oops,something went wrong",
+        text1: "Oops,something went wrong!",
         position: "top",
       });
     }
@@ -114,7 +116,7 @@ export default function WelcomePage() {
         setGoalLoading(false);
         Toast.show({
           type: "success",
-          text1: "Goal has been set",
+          text1: "Goal has been set!",
           position: "top",
         });
         setSuccess(true);
@@ -130,7 +132,7 @@ export default function WelcomePage() {
       setModalVisible(false);
       Toast.show({
         type: "error",
-        text1: "Cant set the goal, Retry !",
+        text1: "Cant set the goal, Retry!",
         position: "top",
       });
       return setSuccess(false);
@@ -215,6 +217,9 @@ export default function WelcomePage() {
   useEffect(() => {
     setLoading(true);
     finale();
+
+
+
   }, []);
   
 
