@@ -47,7 +47,7 @@ const EventModal = (props) => {
               }}
             >
               <Text style={{ fontWeight: "bold" }}>End time:</Text>
-              <Text> {dayjs(data.start).format("h:mm A")}</Text>
+              <Text> {dayjs(data.end).format("h:mm A")}</Text>
             </View>
 
             <View
