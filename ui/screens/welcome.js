@@ -14,6 +14,7 @@ import {
   Platform,
   Modal,
   KeyboardAvoidingView,
+  Keyboard,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Toast from "react-native-toast-message";
@@ -66,13 +67,13 @@ export default function WelcomePage() {
         console.log(data + "data herer ---------------------------");
         await AsyncStorage.removeItem("token");
         console.log(data);
-        throw new Error("something went wrong");
+        throw new Error("something went wrong!");
       }
-      throw new Error("user is not authorized");
+      throw new Error("user is not authorized!");
     } catch (error) {
-      if (error.message === "Network request failed") {
+      if (error.message === "Network request failed!") {
         console.log(error);
-        setGoal("!Network error!");
+        setGoal("Network error!");
         return;
       }
       console.log(error);
@@ -85,6 +86,7 @@ export default function WelcomePage() {
       });
     }
   };
+
 
   const handleSetGoal = async () => {
     try {
@@ -102,7 +104,7 @@ export default function WelcomePage() {
           authorization: `Bearer ${Token}`,
         },
         body: JSON.stringify({
-          token: Token,
+          
           goalText: newGoal,
         }),
       });
@@ -386,6 +388,7 @@ export default function WelcomePage() {
                     <TouchableOpacity
                       style={styles.button}
                       onPress={() => {
+                        Keyboard.dismiss();
                         handleSetGoal();
                       }}
                     >
