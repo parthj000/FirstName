@@ -50,11 +50,11 @@ const CustomWeeklyComponent = () => {
       );
     }
 
-    console.log("hiiiii this is week");
+    console.log("week is renderrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrred")
   }, []);
 
   const onSwipeLeft = (nextweek) => {
-    console.log("Swiped Left");
+    
     fetchMonthEvents(
       setNextweek,
       setPreviousweek,
@@ -67,7 +67,7 @@ const CustomWeeklyComponent = () => {
   };
 
   const onSwipeRight = (previousweek) => {
-    console.log("Swiped Right");
+    
     fetchMonthEvents(
       setNextweek,
       setPreviousweek,
@@ -119,9 +119,7 @@ const CustomWeeklyComponent = () => {
         </View>
       ) : (
         <GestureHandlerRootView style={{ flex: 1 }}>
-          {console.log({ nextweek })}
-          {console.log({ previousweek })}
-          {console.log(weekEvents)}
+          
           <View style={styles.container}>
             <PanGestureHandler
               onGestureEvent={handleGesture}
@@ -139,7 +137,7 @@ const CustomWeeklyComponent = () => {
                   width={width}
                   mode="week"
                   onPressEvent={(e) => {
-                    console.log(e);
+                    
                     setModalData(e);
                     setModalVisible(true);
                   }}

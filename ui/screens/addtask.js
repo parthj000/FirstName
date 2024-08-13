@@ -17,9 +17,11 @@ import { Dropdown } from "react-native-element-dropdown";
 import Toast from "react-native-toast-message";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import WeekView from "../components/WeekView";
 const AddTask = () => {
   const navigation = useNavigation();
+
+
+
   const data = [
     { label: "Don't repeat", value: "N" },
     { label: "Daily", value: "D" },
@@ -66,9 +68,13 @@ const AddTask = () => {
           text1: "Event created succesfully",
         });
         setTimeout(() => {
-          navigation.goBack({
-            view:"Month"
-        });
+         
+         navigation.navigate({
+           name: "Calendar",
+           params: { refresh: true },
+           merge: true,
+         });
+
         }, 1000);
 
         return;
@@ -309,7 +315,7 @@ const AddTask = () => {
           >
             <TouchableOpacity
               onPress={() => {
-                navigation.goBack(WeekView);
+              navigation.goBack();
               }}
               style={{
                 backgroundColor: "#C8D5E1",

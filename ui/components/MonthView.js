@@ -62,7 +62,7 @@ const MonthView = () => {
   };
 
   const handleCell = (date) => {
-    console.log("Cell pressed:", date);
+   
     setSelectedValue("day");
     setMonth(date);
     setView("day");
@@ -119,7 +119,6 @@ const MonthView = () => {
                 height={height}
                 showAdjacentMonths={false}
                 onPressEvent={(event) => {
-                  console.log(event);
                   setModalData(event);
 
                   setModalVisible(true);

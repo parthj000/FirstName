@@ -30,10 +30,10 @@ const MyCalendarComponent = () => {
     try {
       const start = dayjs(month).startOf("day").valueOf() / 1000;
       const end = dayjs(month).endOf("day").valueOf() / 1000;
-      console.log(start, end);
+      
       const token = await AsyncStorage.getItem("token");
 
-      console.log(token);
+      
       const res = await fetch(
         `${process.env.BACKEND_URI}/api/events?startDate=${start}&endDate=${end}&mode=D`,
         {
@@ -44,12 +44,12 @@ const MyCalendarComponent = () => {
         }
       );
       const data = await res.json();
-      console.log(data);
+      
       const events = doEventsStructuring(data.events);
       setEvents(events);
 
       setLoading(false);
-      console.log("fetch day is runned");
+      console.log("fetch day is runneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeed");
       return;
     } catch (err) {
       console.log(err);
@@ -71,7 +71,7 @@ const MyCalendarComponent = () => {
         </View>
       ) : (
         <View style={styles.container}>
-          {console.log(month)}
+          
           <Calendar
             dayHeaderStyle={{ backgroundColor: "white" }}
             weekDayHeaderHighlightColor="black"
