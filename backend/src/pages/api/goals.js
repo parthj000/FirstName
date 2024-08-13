@@ -46,48 +46,49 @@ export default async (req, res) => {
           createdAt: currentTimestamp, // Store timestamp
         });
   
-        res.status(201).json({ message: 'Goal saved successfully', goalId: result.insertedId });
+        res.status(201).json({ id: result.insertedId, goalText });
       }
     } catch (error) {
       res.status(500).json({ message: 'Internal server error' });
     }
   }
+  
   ///////////////////////////////////
   else if (req.method === 'PATCH') {
     // PATCH request handler
     const { goalText } = req.body;
-
+  
     if (!token || !goalText) {
       return res.status(400).json({ message: 'Goal text is required' });
     }
-
+  
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       const client = await clientPromise;
       const db = client.db('');
-
+  
       // Retrieve user's username from users collection
       const user = await db.collection('users').findOne({ _id: new ObjectId(decoded.userId) });
       if (!user) {
         return res.status(404).json({ message: 'User not found' });
       }
-
+  
       const currentTimestamp = Math.floor(Date.now() / 1000);
-
+  
       // Check if there is an existing goal within the past 24 hours
       const existingGoal = await db.collection('goals').findOne({
         userId: new ObjectId(decoded.userId),
         createdAt: { $gte: currentTimestamp - 24 * 60 * 60 }
       });
-
+  
       if (existingGoal) {
         // Update the existing goalText and add updatedAt field
         await db.collection('goals').updateOne(
           { _id: existingGoal._id },
           { $set: { goalText, updatedAt: currentTimestamp } }
         );
-
-        res.status(200).json({ message: 'Goal updated successfully' });
+  
+        res.status(200).json({ id: existingGoal._id, goalText });
       } else {
         // Return an error message if there's no existing goal
         return res.status(400).json({ message: 'No goal found. Use POST to create a new goal.' });
@@ -95,7 +96,8 @@ export default async (req, res) => {
     } catch (error) {
       res.status(500).json({ message: 'Internal server error' });
     }
-  } 
+  }
+  
   ///////////////////////////////////
   else if (req.method === 'GET') {
     // GET request handler
@@ -111,10 +113,16 @@ export default async (req, res) => {
       const currentTimestamp = Math.floor(Date.now() / 1000);
       const past24Hours = currentTimestamp - 24 * 60 * 60;
   
-      const goals = await db.collection('goals').findOne({
+      const goal = await db.collection('goals').findOne({
         userId: new ObjectId(decoded.userId),
         createdAt: { $gte: past24Hours }
       });
+  
+      let goalText = null;
+      if (goal) {
+        // If goal exists and was created within the last 24 hours, use its goalText
+        goalText = goal.goalText;
+      }
   
       const buffer = Buffer.from(token.split(".")[1], 'base64');
       const details = JSON.parse(buffer.toString());
@@ -123,7 +131,7 @@ export default async (req, res) => {
       let obj = {
         username,
         email,
-        goalText: goals ? goals.goalText : null,
+        goalText,  // goalText will be null if it was created more than 24 hours ago
       };
   
       res.status(200).json(obj);
@@ -131,6 +139,7 @@ export default async (req, res) => {
       res.status(500).json({ message: 'Internal server error' });
     }
   }
+  
   ///////////////////////////////////
   else {
     res.status(405).json({ message: 'Method not allowed' });
