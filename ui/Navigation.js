@@ -76,8 +76,8 @@ const StackNavigator = () => {
           component={SignUpPage}
           options={{ headerShown: false }}
         />
-        <Stack.Screen name="AddEvent" component={AddEvent} />
-        <Stack.Screen name="AddTask" component={AddTask} />
+        <Stack.Screen name="Add Event" component={AddEvent} />
+        <Stack.Screen name="Add Task" component={AddTask} />
       </Stack.Navigator>
     </NavigationContainer>
   );

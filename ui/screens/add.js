@@ -17,9 +17,9 @@ import { Dropdown } from "react-native-element-dropdown";
 import Toast from "react-native-toast-message";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import WeekView from "../components/WeekView";
 const AddEvent = () => {
   const navigation = useNavigation();
+
   const data = [
     { label: "Don't repeat", value: "N" },
     { label: "Daily", value: "D" },
@@ -66,7 +66,11 @@ const AddEvent = () => {
           text1: "Event created succesfully",
         });
         setTimeout(() => {
-          navigation.goBack();
+          navigation.navigate({
+            name: "Calendar",
+            params: { refresh: true },
+            merge: true,
+          });
         }, 1000);
 
         return;
@@ -208,10 +212,16 @@ const AddEvent = () => {
                     style={styles.date}
                   >
                     <Text style={showStartTimePicker ? { color: "red" } : null}>
-                      {startTime.toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
+                      {Platform.OS === "ios"
+                        ? startTime.toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })
+                        : startTime.toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            hour12: false,
+                          })}
                     </Text>
                   </TouchableOpacity>
 
@@ -232,10 +242,16 @@ const AddEvent = () => {
                     style={styles.date}
                   >
                     <Text style={showEndTimePicker ? { color: "red" } : null}>
-                      {endTime.toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
+                      {Platform.OS === "ios"
+                        ? endTime.toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })
+                        : endTime.toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            hour12: false,
+                          })}
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -307,7 +323,7 @@ const AddEvent = () => {
           >
             <TouchableOpacity
               onPress={() => {
-                navigation.goBack(WeekView);
+                navigation.goBack();
               }}
               style={{
                 backgroundColor: "#C8D5E1",
@@ -377,6 +393,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "grey",
     paddingHorizontal: 2,
     // paddingVertical: 5,
+    // fontFamily:"glacial-r",
     fontSize: 15,
   },
   second: {

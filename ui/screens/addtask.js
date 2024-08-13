@@ -216,10 +216,16 @@ const AddTask = () => {
                     style={styles.date}
                   >
                     <Text style={showStartTimePicker ? { color: "red" } : null}>
-                      {startTime.toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
+                      {Platform.OS === "ios"
+                        ? startTime.toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })
+                        : startTime.toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            hour12: false,
+                          })}
                     </Text>
                   </TouchableOpacity>
 
@@ -240,10 +246,16 @@ const AddTask = () => {
                     style={styles.date}
                   >
                     <Text style={showEndTimePicker ? { color: "red" } : null}>
-                      {endTime.toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
+                      {Platform.OS === "ios"
+                        ? endTime.toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })
+                        : endTime.toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            hour12: false,
+                          })}
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -315,7 +327,7 @@ const AddTask = () => {
           >
             <TouchableOpacity
               onPress={() => {
-              navigation.goBack();
+                navigation.goBack();
               }}
               style={{
                 backgroundColor: "#C8D5E1",

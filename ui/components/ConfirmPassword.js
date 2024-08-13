@@ -60,7 +60,7 @@ const ConfirmPassword = (props) => {
           <View style={styles.passwordContainer}>
             <TextInput
               style={[styles.input, styles.fullInput]}
-              placeholder="Password"
+              placeholder="New password"
               secureTextEntry={!showPassword}
               onChangeText={(val) => {
                 setPassword(val);
@@ -89,7 +89,7 @@ const ConfirmPassword = (props) => {
           <View style={styles.passwordContainer}>
             <TextInput
               style={[styles.input, styles.fullInput]}
-              placeholder="Password"
+              placeholder="Confirm password"
               secureTextEntry={!showPassword2}
               onChangeText={(val) => {
                 setPassword2(val);

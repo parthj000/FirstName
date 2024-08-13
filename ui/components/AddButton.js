@@ -28,10 +28,10 @@ const FloatButton = () => {
 
   const handlePress = (name) => {
     if (name === "add_event") {
-      navigation.push("AddEvent");
+      navigation.push("Add Event");
    
     } else if (name === "add_task") {
-      navigation.push("AddTask");
+      navigation.push("Add Task");
      
     }
   };

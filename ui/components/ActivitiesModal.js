@@ -10,7 +10,7 @@ import {
   Platform,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Dropdown } from "react-native-element-dropdown";
 import Divder from "./Divder";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -188,7 +188,7 @@ const TimeComp = (props) => {
     setShowStartDatePicker,
   } = props;
   // const [showPicker, setShowPicker] = useState(false);
-  const [time, setTime] = useState("00:00");
+  const [time, setTime] = useState("00h:00m");
   const [date, setDate] = useState(new Date());
 
   return (
@@ -224,22 +224,31 @@ const TimeComp = (props) => {
               value={date}
               mode="time"
               // style={{ width: "100%" }}
+              locale="en_GB"
               is24Hour={true}
               display="spinner"
               onChange={(event, time) => {
                 if (Platform.OS === "android") {
                   setShowPicker(false);
                 }
-                setDate(time);
+                console.log(time,"tjosooooooooo is time");
+               if(event.type==="set"){
 
-                let hours = time.getHours().toString().padStart(2, "0");
-                let minutes = time.getMinutes().toString().padStart(2, "0");
+                  setDate(time);
 
-                setTime(`${hours}:${minutes}`);
-                setDataSend({
-                  ...dataSend,
-                  duration: parseInt(hours) * 60 * 60 + parseInt(minutes) * 60,
-                });
+                  let hours = time.getHours().toString().padStart(2, "0");
+                  let minutes = time.getMinutes().toString().padStart(2, "0");
+
+                  setTime(`${hours}h:${minutes}m`);
+                  setDataSend({
+                    ...dataSend,
+                    duration:
+                      parseInt(hours) * 60 * 60 + parseInt(minutes) * 60,
+                  });
+
+               }
+               
+              
               }}
             />
           </>
@@ -314,8 +323,15 @@ const SelectDate = (props) => {
 };
 
 const DropDownComponent = (props) => {
+ 
   const { datas, styles, dataSend, setDataSend } = props;
-  const [selectedValue, setSelectedValue] = useState("");
+  const [selectedValue, setSelectedValue] = useState(null);
+
+   useEffect(() => {
+    if(datas.length>0 && selectedValue===null){
+      
+    }
+   },[datas]);
 
   return (
     <>
@@ -329,7 +345,7 @@ const DropDownComponent = (props) => {
           placeholder="Select your routine"
           value={selectedValue}
           onChange={(item) => {
-            setSelectedValue(item.value);
+            setSelectedValue(item.id);
             setDataSend({
               ...dataSend,
               activity_sub_type_id: item.id,

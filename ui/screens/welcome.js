@@ -57,7 +57,7 @@ export default function WelcomePage() {
         const data = await res.json();
 
         if (res.ok) {
-          data.goalText ? setGoal(data.goalText) : setGoal("set your goal");
+          data.goalText ? setGoal(data.goalText) : setGoal(" ");
           setName(data.username);
           return;
         }
