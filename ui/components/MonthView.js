@@ -232,11 +232,14 @@ export const fetchMonthEvents = async (
 export function doEventsStructuring(events) {
   if (!events) return [];
   return events.map((key) => ({
+    id:key._id,
     title: key.title,
     start: new Date(key.startDate * 1000),
     end: new Date(key.endDate * 1000),
-    color: "grey",
     des: key.description,
+    recurrence:key.recurrence,
+    category:key.category
+    
   }));
 }
 

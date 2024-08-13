@@ -13,6 +13,7 @@ import Resources from "./screens/resources";
 import SignUpPage from "./screens/signup";
 import AddEvent from "./screens/add";
 import AddTask from "./screens/addtask";
+import UpdateTask from "./screens/updateTask";
 
 const Stack = createStackNavigator();
 
@@ -27,15 +28,13 @@ const StackNavigator = () => {
             elevation: 0,
             shadowOpacity: 0,
             backgroundColor: "#92A0AD",
-            
-
           },
           headerTitleStyle: {
             alignSelf: "center",
             fontSize: 20,
-            fontFamily:"glacial-b"
+            fontFamily: "glacial-b",
           },
-          headerTitleAlign:"center",
+          headerTitleAlign: "center",
           ...TransitionPresets.SlideFromRightIOS,
         }}
       >
@@ -54,7 +53,7 @@ const StackNavigator = () => {
         <Stack.Screen
           name="Calendar"
           component={MyCalendar}
-          options={{ headerBackTitle: "Home",  }}
+          options={{ headerBackTitle: "Home" }}
         />
         <Stack.Screen
           name="Activities"
@@ -78,6 +77,7 @@ const StackNavigator = () => {
         />
         <Stack.Screen name="Add Event" component={AddEvent} />
         <Stack.Screen name="Add Task" component={AddTask} />
+        <Stack.Screen name="Update" component={UpdateTask} />
       </Stack.Navigator>
     </NavigationContainer>
   );

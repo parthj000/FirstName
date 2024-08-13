@@ -15,12 +15,14 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import Divider from "../components/Divder";
 import { Dropdown } from "react-native-element-dropdown";
 import Toast from "react-native-toast-message";
-import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-const AddTask = () => {
-  const navigation = useNavigation();
+const UpdateTask = ({ route, navigation }) => {
 
+    var {event } = route.params;
+    event = JSON.parse(event);
 
+    console.log(event,"this is title");    
+  
 
   const data = [
     { label: "Don't repeat", value: "N" },
@@ -29,62 +31,74 @@ const AddTask = () => {
     { label: "Monthly", value: "M" },
   ];
 
-  const [date, setDate] = useState(new Date());
-  const [startTime, setStartTime] = useState(new Date());
-  const [endTime, setEndTime] = useState(new Date(Date.now() + 30 * 60 * 1000));
-  const [selectedValue, setSelectedValue] = useState("N");
+  const [date, setDate] = useState(new Date(event.start));
+  const [startTime, setStartTime] = useState(new Date(event.start));
+  const [endTime, setEndTime] = useState(new Date(event.end));
+  const [selectedValue, setSelectedValue] = useState(event.recurrence);
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showStartTimePicker, setShowStartTimePicker] = useState(false);
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
-  const [firstInput, setFirstInput] = useState("");
-  const [secondInput, setSecondInput] = useState("");
+  const [firstInput, setFirstInput] = useState(event.title);
+  const [secondInput, setSecondInput] = useState(event.des);
   const [loading, setLoading] = useState(false);
 
   const hadleRespone = async () => {
     try {
       setLoading(true);
       const token = await AsyncStorage.getItem("token");
-      console.log(token);
-      const request = await fetch(`${process.env.BACKEND_URI}/api/events`, {
-        method: "POST",
+      const request = await fetch(`${process.env.BACKEND_URI}/api/events?id=${event.id}`, {
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          token: token,
           startDate: startTime.valueOf(),
           endDate: endTime.valueOf(),
           title: firstInput,
           description: secondInput,
           recurrence: selectedValue,
-          category: "T",
+          category:event.category
         }),
       });
       const res = await request.json();
-      if (request.status === 201) {
+      
+
+      if(request.status===200){
         Toast.show({
           type: "success",
-          text1: "Event created succesfully!",
+          text1: res.message,
         });
-        setTimeout(() => {
-         
-         navigation.navigate({
-           name: "Calendar",
-           params: { refresh: true },
-           merge: true,
-         });
 
+        setTimeout(() => {
+          navigation.navigate({
+            name: "Calendar",
+            params: { refresh: true },
+            merge: true,
+          });
+         
         }, 250);
 
-        return;
+        
+
+      }
+      else{
+        Toast.show({
+          type: "error",
+          text1: res.message,
+        });
+        setLoading(false);
+
       }
 
-      Toast.show({
-        type: "error",
-        text1: res.message,
-      });
-      setLoading(false);
+      
+
+
+      
+      
+      
+      
+      
       return;
     } catch (error) {
       Toast.show({
@@ -93,10 +107,6 @@ const AddTask = () => {
       });
       setLoading(false);
     }
-  };
-
-  const onChange = () => {
-    setShowStartDatePicker(Platform.OS === "ios");
   };
 
   return (
@@ -352,7 +362,7 @@ const AddTask = () => {
                   borderRadius: 5,
                 }}
               >
-                <Text style={{ fontWeight: "bold" }}>Add </Text>
+                <Text style={{ fontWeight: "bold" }}>Update</Text>
               </TouchableOpacity>
             )}
           </View>
@@ -362,7 +372,7 @@ const AddTask = () => {
   );
 };
 
-export default AddTask;
+export default UpdateTask;
 
 const styles = StyleSheet.create({
   lastButton: {

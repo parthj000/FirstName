@@ -355,8 +355,10 @@ export default function WelcomePage() {
                   <ActivityIndicator size="large" color={"black"} />
                 </View>
               ) : (
+                
                 <>
-                  <Text style={styles.modalTitle}>Set a Goal</Text>
+                  <Text style={styles.modalTitle}>Goals for today</Text>
+
                   <View style={styles.inputWrapper}>
                     <TextInput
                       style={styles.input}
