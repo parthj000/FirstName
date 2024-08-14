@@ -152,7 +152,9 @@ const AddTask = () => {
                 style={styles.date}
               >
                 <Text style={showStartDatePicker ? { color: "red" } : null}>
-                  {date.toDateString()}
+                  {`${date.toDateString().split(" ")[1]} ${
+                    date.toDateString().split(" ")[2]
+                  } ,${date.toDateString().split(" ")[3]}`}
                 </Text>
               </TouchableOpacity>
             </View>

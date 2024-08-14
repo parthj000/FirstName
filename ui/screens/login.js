@@ -65,7 +65,7 @@ export default function Login() {
           <View style={styles.errorContainer}>
             <TextInput
               style={styles.input}
-              placeholder="Email"
+              placeholder="Email or username"
               onChangeText={(val) => {
                 val ? setEmailerr(null) : setEmailerr("*required");
                 setEmail(val);
