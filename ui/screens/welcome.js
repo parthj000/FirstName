@@ -566,6 +566,7 @@ const logoutStyles = StyleSheet.create({
     justifyContent: "center",
   },
   text: {
+    fontFamily:"glacial-b"
     
   },
 });
