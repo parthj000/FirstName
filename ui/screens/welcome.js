@@ -14,6 +14,8 @@ import {
   Platform,
   Modal,
   KeyboardAvoidingView,
+  Keyboard,
+  ScrollView,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Toast from "react-native-toast-message";
@@ -60,19 +62,21 @@ export default function WelcomePage() {
 
         if (res.ok) {
           data.goalText ? setGoal(data.goalText) : setGoal(" ");
+          data.goalText ? setNewGoal(data.goalText) : setNewGoal(" ");
+          
           setName(data.username);
           return;
         }
         console.log(data + "data herer ---------------------------");
         await AsyncStorage.removeItem("token");
         console.log(data);
-        throw new Error("something went wrong");
+        throw new Error("something went wrong!");
       }
-      throw new Error("user is not authorized");
+      throw new Error("user is not authorized!");
     } catch (error) {
-      if (error.message === "Network request failed") {
+      if (error.message === "Network request failed!") {
         console.log(error);
-        setGoal("!Network error!");
+        setGoal("Network error!");
         return;
       }
       console.log(error);
@@ -86,23 +90,30 @@ export default function WelcomePage() {
     }
   };
 
+
   const handleSetGoal = async () => {
     try {
       console.log(newGoal);
       if (!newGoal) {
         return null;
       }
+      var method="POST";
+      if(goal && goal!==" "){
+        method="PATCH";
+       
+      }
+
 
       setGoalLoading(true);
       console.log(Token);
       let res = await fetch(`${process.env.BACKEND_URI}/api/goals`, {
-        method: "POST",
+        method: method,
         headers: {
           "Content-Type": "application/json",
           authorization: `Bearer ${Token}`,
         },
         body: JSON.stringify({
-          token: Token,
+          
           goalText: newGoal,
         }),
       });
@@ -110,13 +121,16 @@ export default function WelcomePage() {
       const data = await res.json();
       console.log(data, "data of our goal handling");
 
+
+      // status code is 201 then new goal is created if it is 200 then goal is updated 
+
       if (res.status === 201 || res.status === 200) {
         setGoal(newGoal);
         setModalVisible(false);
         setGoalLoading(false);
         Toast.show({
           type: "success",
-          text1: "Goal has been set!",
+          text1: res.status===201?"Goal has been set succesfully!":"Goal has been updated!",
           position: "top",
         });
         setSuccess(true);
@@ -124,6 +138,11 @@ export default function WelcomePage() {
       } else {
         setGoalLoading(false);
         setModalVisible(false);
+        Toast.show({
+          type: "success",
+          text1:"Something went wrong, Please refresh!",
+          position: "top",
+        });
         return setSuccess(false);
       }
     } catch (error) {
@@ -278,61 +297,62 @@ export default function WelcomePage() {
               <Text style={logoutStyles.text}>Logout</Text>
             </TouchableOpacity>
           </View>
-
-          <View style={styles.first}>
-            <Text style={styles.Welcome}>
-              Welcome{" "}
-              <Text style={{ color: "black", fontWeight: "300" }}>back,</Text>
-            </Text>
-            <Text style={styles.username}>{name}</Text>
-            <TouchableOpacity
-              onPress={() => {
-                setModalVisible(true);
-              }}
-              style={styles.usernameGoal}
-            >
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  width: "100%",
+          
+            <View style={styles.first}>
+              <Text style={styles.Welcome}>
+                Welcome{" "}
+                <Text style={{ color: "black", fontWeight: "300" }}>back,</Text>
+              </Text>
+              <Text style={styles.username}>{name}</Text>
+              <TouchableOpacity
+                onPress={() => {
+                  setModalVisible(true);
                 }}
+                style={styles.usernameGoal}
               >
-                {/* Empty View to balance the icon on the right */}
-                <View style={{ width: 18 }} />
-                
-                <Text
+                <View
                   style={{
-                    fontFamily: "glacial-r",
-                    fontSize: 16,
-                    textAlign: "center",
-                    flex: 1, // Takes up the remaining space
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    width: "100%",
                   }}
                 >
-                  {goal}
-                </Text>
-                <Ionicons
-                  name="create-outline"
-                  style={{ fontSize: 18 }}
-                  color="#000"
-                />
-              </View>
-            </TouchableOpacity>
+                  {/* Empty View to balance the icon on the right */}
+                  <View style={{ width: 18 }} />
 
-            <Text
-              style={{
-                textAlign: "center",
-                paddingHorizontal: 30,
-                fontFamily: "glacial-b",
-                fontSize: 16,
-              }}
-            >
-              Goals for today
-            </Text>
+                  <Text
+                    style={{
+                      fontFamily: "glacial-r",
+                      fontSize: 16,
+                      textAlign: "center",
+                      flex: 1, // Takes up the remaining space
+                    }}
+                  >
+                    {goal}
+                  </Text>
+                  <Ionicons
+                    name="create-outline"
+                    style={{ fontSize: 18 }}
+                    color="#000"
+                  />
+                </View>
+              </TouchableOpacity>
 
-            <WelcomeGrid />
-          </View>
+              <Text
+                style={{
+                  textAlign: "center",
+                  paddingHorizontal: 30,
+                  fontFamily: "glacial-b",
+                  fontSize: 16,
+                }}
+              >
+                Goals for today
+              </Text>
+
+              <WelcomeGrid />
+            </View>
+          
         </View>
       )}
 
@@ -356,7 +376,8 @@ export default function WelcomePage() {
                 </View>
               ) : (
                 <>
-                  <Text style={styles.modalTitle}>Set a Goal</Text>
+                  <Text style={styles.modalTitle}>Goals for today</Text>
+
                   <View style={styles.inputWrapper}>
                     <TextInput
                       style={styles.input}
@@ -384,6 +405,7 @@ export default function WelcomePage() {
                     <TouchableOpacity
                       style={styles.button}
                       onPress={() => {
+                        Keyboard.dismiss();
                         handleSetGoal();
                       }}
                     >
@@ -458,20 +480,21 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   first: {
-    paddingHorizontal: 40, // backgroundColor: "black",
+    paddingHorizontal: 40,
+    paddingVertical:20,
+    // justifyContent:"center"
   },
 
   Welcome: {
     marginTop: "5%",
     fontSize: 36,
-    letterSpacing: Platform.OS === "ios" ? 2.5 : 1.5,
     fontFamily: "glacial-b",
     color: "black",
   },
   username: {
     color: "black",
     fontSize: Platform.OS === "ios" ? 40 : 35,
-    fontFamily: "chunk-b",
+    fontFamily: "chunk-r",
     textTransform: "capitalize",
   },
 
@@ -543,6 +566,7 @@ const logoutStyles = StyleSheet.create({
     justifyContent: "center",
   },
   text: {
+    fontFamily:"glacial-b"
     
   },
 });

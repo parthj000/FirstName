@@ -71,7 +71,7 @@ const AddEvent = () => {
             params: { refresh: true },
             merge: true,
           });
-        }, 1000);
+        }, 250);
 
         return;
       }

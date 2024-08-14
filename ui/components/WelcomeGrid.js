@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     width: "100%",
     gap: 20,
-    marginBottom: 10,
+    marginBottom: 30,
   },
   itemWrapper: {
     flex: 1,
@@ -110,10 +110,13 @@ const styles = StyleSheet.create({
     width: 250,
     height: 150,
     marginBottom: 5,
+    alignItems:"center",
+    justifyContent:"center"
   },
   itemImage: {
-    width: "100%",
-    height: "100%",
+
+    width: "85%",
+    height: "85%",
     resizeMode: "contain",
   },
   itemText: {
