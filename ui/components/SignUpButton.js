@@ -24,21 +24,30 @@ async function signUp(email, username, setLoading, navigation,firstName,lastName
       }),
     });
 
-    console.log({
-      username: username,
-      email: email,
-      firstname: firstName,
-      lastname: lastName,
-    });
-
     const data = await res.json();
+
+    if (res.status === 200 || res.status === 201){
+       setLoading(false);
+       navigation.replace("Login");
+
+       Toast.show({
+         type: "success",
+         text1: data.message,
+       });
+
+       return;
+
+    }
     setLoading(false);
-    navigation.replace("Login");
 
     Toast.show({
-      type: "success",
+      type: "error",
       text1: data.message,
     });
+
+
+      
+     
   } catch (err) {
     console.log(err);
     Toast.show({
