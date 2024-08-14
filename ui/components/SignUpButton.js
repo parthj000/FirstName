@@ -19,8 +19,8 @@ async function signUp(email, username, setLoading, navigation,firstName,lastName
       body: JSON.stringify({
         username: username,
         email: email,
-        firstName:firstName,
-        lastName:lastName
+        firstname:firstName,
+        lastname:lastName
       }),
     });
 

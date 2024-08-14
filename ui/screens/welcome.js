@@ -59,12 +59,16 @@ export default function WelcomePage() {
           },
         });
         const data = await res.json();
+        console.log(data);
 
         if (res.ok) {
           data.goalText ? setGoal(data.goalText) : setGoal(" ");
           data.goalText ? setNewGoal(data.goalText) : setNewGoal(" ");
           
-          setName(data.username);
+          setName(data.firstname);
+         
+          
+
           return;
         }
         console.log(data + "data herer ---------------------------");

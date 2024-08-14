@@ -39,6 +39,8 @@ export default async (req, res) => {
         username,
         email,
         password: hashedPassword,
+        firstname:firstname,
+        lastname:lastname,
         confirm: false,
         force: true,
       };
