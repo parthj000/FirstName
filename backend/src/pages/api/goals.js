@@ -19,7 +19,7 @@ export default async (req, res) => {
       const client = await clientPromise;
       const db = client.db('');
   
-      // Retrieve user's username from users collection
+      // Retrieve user's firstname from users collection
       const user = await db.collection('users').findOne({ _id: new ObjectId(decoded.userId) });
       if (!user) {
         return res.status(404).json({ message: 'User not found' });
@@ -41,7 +41,7 @@ export default async (req, res) => {
         // Insert a new goal if there's no existing goal within the past 24 hours
         const result = await db.collection('goals').insertOne({
           userId: new ObjectId(decoded.userId),
-          username: user.username,
+          firstname: user.firstname,
           goalText,
           createdAt: currentTimestamp, // Store timestamp
         });
@@ -67,7 +67,7 @@ export default async (req, res) => {
       const client = await clientPromise;
       const db = client.db('');
   
-      // Retrieve user's username from users collection
+      // Retrieve user's firstname from users collection
       const user = await db.collection('users').findOne({ _id: new ObjectId(decoded.userId) });
       if (!user) {
         return res.status(404).json({ message: 'User not found' });
@@ -119,21 +119,30 @@ export default async (req, res) => {
       });
   
       let goalText = null;
+      let goalId = null;
       if (goal) {
         // If goal exists and was created within the last 24 hours, use its goalText
         goalText = goal.goalText;
+        goalId = goal._id;
       }
-  
+    
       const buffer = Buffer.from(token.split(".")[1], 'base64');
       const details = JSON.parse(buffer.toString());
-      const { username, email } = details;
+      const { email } = details;
+  
+      // Retrieve user's firstname from users collection
+      const user = await db.collection('users').findOne({ _id: new ObjectId(decoded.userId) });
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
   
       let obj = {
-        username,
+        firstname: user.firstname,
         email,
+        goalId,
         goalText,  // goalText will be null if it was created more than 24 hours ago
       };
-  
+
       res.status(200).json(obj);
     } catch (error) {
       res.status(500).json({ message: 'Internal server error' });
