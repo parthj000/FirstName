@@ -189,8 +189,11 @@ const TimeComp = (props) => {
   } = props;
   // const [showPicker, setShowPicker] = useState(false);
   const [time, setTime] = useState("00h:00m");
-  const [date, setDate] = useState(new Date());
-
+const [date, setDate] = useState(() => {
+  const initialDate = new Date("2024-06-06");
+  initialDate.setHours(0, 0, 0, 0);
+  return initialDate;
+});
   return (
     <>
       <View
@@ -199,7 +202,7 @@ const TimeComp = (props) => {
         }}
       >
         <View style={excStyle.time}>
-          <Text style={excStyle.selectTime}>Select Time</Text>
+          <Text style={excStyle.selectTime}>Select Duration</Text>
           <TouchableOpacity
             onPress={() => {
               setShowStartDatePicker(false);
@@ -294,7 +297,7 @@ const SelectDate = (props) => {
           }}
         >
           <Text style={showStartDatePicker&&Platform.OS ==="ios" ? { color: "red" } : null}>
-            {date.toDateString()}
+            {`${date.toDateString().split(" ")[1]} ${date.toDateString().split(" ")[2]} ,${date.toDateString().split(" ")[3]}`}
           </Text>
         </TouchableOpacity>
       </View>
@@ -329,6 +332,8 @@ const DropDownComponent = (props) => {
 
    useEffect(() => {
     if(datas.length>0 && selectedValue===null){
+      console.log(datas,"this are the datas===========================");
+      setSelectedValue(datas[0].id);
       
     }
    },[datas]);
@@ -429,6 +434,8 @@ const TextComp = (props) => {
       setShowTextInput(false);
     }
   };
+
+  
 
   return (
     <>

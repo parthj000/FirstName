@@ -27,6 +27,11 @@ export default function SignUpPage() {
   const [pwderr, setPwderr] = useState(null);
   const [emailerr, setEmailerr] = useState(null);
   const [usrerr, setUsrerr] = useState(null);
+  const [firstName, setFirstName] = useState(null);
+  const [lastName, setLastName] = useState(null);
+  const [firstErr, setFirstErr] = useState("");
+  const [lastErr, setLastErr] = useState("");
+  
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
@@ -59,6 +64,39 @@ export default function SignUpPage() {
           </Text>
 
           {/* username TextInput */}
+          <View style={{ width: "100%" }}>
+            <TextInput
+              maxLength={20}
+              style={styles.inputEmail}
+              placeholder="First name "
+              onChangeText={(val) => {
+                setUsername(val);
+                setUsrerr(validateUsername(val));
+              }}
+            />
+            {firstErr ? (
+              <View style={styles.errorContainer}>
+                <Text style={styles.error}>{firstErr}</Text>
+              </View>
+            ) : null}
+          </View>
+
+          <View style={{ width: "100%" }}>
+            <TextInput
+              maxLength={20}
+              style={styles.inputEmail}
+              placeholder="Last name "
+              onChangeText={(val) => {
+                setUsername(val);
+                setUsrerr(validateUsername(val));
+              }}
+            />
+            {lastErr? (
+              <View style={styles.errorContainer}>
+                <Text style={styles.error}>{lastErr}</Text>
+              </View>
+            ) : null}
+          </View>
 
           <View style={{ width: "100%" }}>
             <TextInput
@@ -108,6 +146,13 @@ export default function SignUpPage() {
             setPwderr={setPwderr}
             usrerr={usrerr}
             setUsrerr={setUsrerr}
+            firstName= {firstName}
+            lastName = {lastName}
+            setFirstErr = {setFirstErr}
+            setLastErr = {setLastErr}
+            firstErr = {firstErr}
+            lastErr = {lastErr}
+            
           />
 
           {/* Option Text */}
