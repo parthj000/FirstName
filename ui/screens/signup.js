@@ -70,8 +70,15 @@ export default function SignUpPage() {
               style={styles.inputEmail}
               placeholder="First name "
               onChangeText={(val) => {
-                setUsername(val);
-                setUsrerr(validateUsername(val));
+                if(val){
+                  setFirstName(val);
+                  setFirstErr("")
+                  return;
+                }
+                setFirstErr("*required")
+
+                
+                
               }}
             />
             {firstErr ? (
@@ -87,8 +94,12 @@ export default function SignUpPage() {
               style={styles.inputEmail}
               placeholder="Last name "
               onChangeText={(val) => {
-                setUsername(val);
-                setUsrerr(validateUsername(val));
+                if (val) {
+                  setLastName(val);
+                  setLastErr("");
+                  return;
+                }
+                setLastErr("*required");
               }}
             />
             {lastErr? (

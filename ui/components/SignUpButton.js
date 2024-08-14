@@ -8,8 +8,7 @@ import React, { useState } from "react";
 import Toast from "react-native-toast-message";
 import { useNavigation } from "@react-navigation/native";
 
-
-async function signUp(email, username, setLoading,navigation) {
+async function signUp(email, username, setLoading, navigation,firstName,lastName) {
   try {
     setLoading(true);
     const res = await fetch(`${process.env.BACKEND_URI}/api/signup`, {
@@ -20,7 +19,16 @@ async function signUp(email, username, setLoading,navigation) {
       body: JSON.stringify({
         username: username,
         email: email,
+        firstName:firstName,
+        lastName:lastName
       }),
+    });
+
+    console.log({
+      username: username,
+      email: email,
+      firstname: firstName,
+      lastname: lastName,
     });
 
     const data = await res.json();
@@ -53,15 +61,23 @@ const SignUpButton = (props) => {
           style={styles.signUpButton}
           onPress={async () => {
             try {
-              if (!props.username || !props.email) {
+              if (
+                !props.username ||
+                !props.email ||
+                !props.firstName ||
+                !props.lastName
+              ) {
                 props.username ? null : props.setUsrerr("*required");
                 props.email ? null : props.setEmailerr("*required");
+                props.firstName ? null : props.setFirstErr("*required");
+                props.lastName ? null : props.setLastErr("*required");
+
                 return null;
-              } else if (props.emailerr || props.usrerr) {
+              } else if (props.emailerr || props.usrerr || props.firstErr || props.lastErr) {
                 return null;
               }
 
-              await signUp(props.email, props.username, setLoading,navigation);
+              await signUp(props.email, props.username, setLoading, navigation,props.firstName,props.lastName);
             } catch (err) {
               console.log(err);
             }
