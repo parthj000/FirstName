@@ -21,7 +21,7 @@ const sendMail = async (params) => {
         address: process.env.USER,
       },
       to: email,
-      subject: "Welcome to BrainFlow - Let's Get Started!",
+      subject: "Temporary password for verification",
       text: "hii",
       html: `<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; padding: 20px; max-width: 600px; margin: auto; background-color: #f4f4f4;">
     <div style="background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
@@ -33,7 +33,7 @@ const sendMail = async (params) => {
         <p><strong>Password:</strong> <span style="background-color: #eaf8fc; padding: 4px 8px; border-radius: 4px;">${tempPassword}</span></p>
         <p><strong>Note:</strong> This is a temporary password, please change it when you login.</p>
         <p><strong>Need Help?</strong></p>
-        <p><strong>If you need help, contact our Support Team at </strong><a href="mailto:contactbrainflow@gmail.com" style="color: #4CAF50;">contactbrainflow@gmail.com</a></p>
+        <p>Contact our Support Team: <a href="mailto:contactbrainflow@gmail.com" style="color: #4CAF50;">[add support_email]</a></p>
         <p>Remember, success in school isn't just about studying harder—it's about studying smarter and taking care of your mental health. We're here to help you do both.</p>
         <p>Best of luck with your studies!</p>
         <p><strong>The BrainFlow Team</strong></p>
