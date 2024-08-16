@@ -178,7 +178,7 @@ const handleOnPress = async (props) => {
       navigation.replace("WelcomePage");
       Toast.show({
         type: "success",
-        text1: "Password has been set successfully!",
+        text1: "User created successfully!",
       });
       setLoading(false);
       return;
