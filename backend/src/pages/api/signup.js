@@ -48,7 +48,7 @@ export default async (req, res) => {
       await db.collection("users").insertOne(newUser);
       await sendMail({ ...newUser, tempPassword: password });
 
-      res.status(201).json({ message: "Verification email has been sent to you" });
+      res.status(201).json({ message: "User created successfully! A temporary password has been sent to your email." });
     }
 
     if (isEmail) {
